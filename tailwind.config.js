@@ -1,10 +1,10 @@
-/** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./index.html","./src/**/*.{ts,tsx}"],
+  content: ["./index.html", "./src/**/*.{ts,tsx,scss}"],
   theme: {
     extend: {
-      borderRadius: { 'xl2': '1.25rem' }
-    }
+      fontFamily: { sans: ["Lato", "ui-sans-serif", "system-ui"] },
+      borderRadius: { xl2: "1.25rem" },
+    },
   },
   plugins: [],
 }

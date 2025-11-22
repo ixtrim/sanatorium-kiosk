@@ -6,7 +6,11 @@ export default function Home() {
     <div className="kiosk-container">
       <TopBar />
 
-      <div className="menu-grid">
+      <div className="main-menu">
+        <Link to="/gallery" className="kiosk-btn kiosk-btn--green">Galeria zdjęć</Link>
+        <Link to="/gallery" className="kiosk-btn kiosk-btn--green">Galeria zdjęć</Link>
+        <Link to="/gallery" className="kiosk-btn kiosk-btn--green">Galeria zdjęć</Link>
+        
         <Link to="/gallery" className="kiosk-btn kiosk-btn--green">Galeria zdjęć</Link>
         <Link to="/pdf?url=/media/przyklad.pdf" className="kiosk-btn kiosk-btn--orange">Otwórz PDF</Link>
       </div>

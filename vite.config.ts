@@ -7,21 +7,34 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'brand/logo-orange.svg', 'brand/logo-white.svg'],
-      manifest: {
-        name: 'Sanatorium Kiosk',
-        short_name: 'Kiosk',
-        start_url: '/',
-        display: 'standalone',
-        background_color: '#ffffff',
-        theme_color: '#ffffff',
-        icons: [] // dorzucimy później
-      },
+      includeAssets: [
+        'favicon.svg',
+        'media/brand/logo-orange.svg',
+        'media/brand/logo-white.svg',
+        'fonts/Lato-Thin.ttf',
+        'fonts/Lato-ThinItalic.ttf',
+        'fonts/Lato-Light.ttf',
+        'fonts/Lato-LightItalic.ttf',
+        'fonts/Lato-Regular.ttf',
+        'fonts/Lato-Italic.ttf',
+        'fonts/Lato-Bold.ttf',
+        'fonts/Lato-BoldItalic.ttf',
+        'fonts/Lato-Black.ttf',
+        'fonts/Lato-BlackItalic.ttf',
+      ],
       workbox: {
         runtimeCaching: [
           { urlPattern: /\.(png|jpg|jpeg|webp|gif)$/i, handler: 'StaleWhileRevalidate' },
           { urlPattern: /\.pdf$/i, handler: 'CacheFirst' },
-          { urlPattern: /\/api\//, handler: 'StaleWhileRevalidate' }
+          { urlPattern: /\/api\//, handler: 'StaleWhileRevalidate' },
+          {
+            urlPattern: /.*\.(?:woff2?|ttf|otf)$/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'fonts',
+              expiration: { maxEntries: 30, maxAgeSeconds: 60 * 60 * 24 * 365 }
+            }
+          }
         ]
       }
     })

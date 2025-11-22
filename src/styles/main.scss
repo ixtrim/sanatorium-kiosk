@@ -1,9 +1,9 @@
+@use './tokens';
+@use './mixins';
+@use './base';
+@use './components/buttons';
+@use './components/layout';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import './tokens';
-@import './mixins';
-@import './base';
-@import './components/buttons';
-@import './components/layout';
