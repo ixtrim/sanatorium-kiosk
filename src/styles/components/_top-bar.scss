@@ -1,0 +1,66 @@
+@use '../mixins' as *;
+
+.topbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+
+  &__brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    color: inherit;
+    text-decoration: none;
+
+    &__img {
+      width: 130px;
+      height: auto;
+    }
+  }
+
+  &__meta {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-8);
+
+    &__time {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: var(--space-1);
+
+      &__clock {
+        font-size: 2rem;
+      }
+
+      &__date {
+        font-size: 1.25rem;
+      }
+    }
+
+    &__weather {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-1);
+      font-size: 1.25rem;
+
+      &__icon {
+        width: auto;
+
+        img {
+          width: auto;
+          height: 39px;
+        }
+      }
+
+      &__temp {
+        align-items: center;
+        font-size: 1.25rem;
+      }
+    }
+  }
+}

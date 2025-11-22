@@ -112,17 +112,20 @@
     user-select: none;
     overscroll-behavior: contain;
     font-family: 'Lato', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans';
-  }
 
-  * {
-    touch-action: manipulation;
-  }
+    * {
+      touch-action: manipulation;
+    }
 
-  img {
-    -webkit-user-drag: none;
-  }
+    img {
+      margin: 0;
+      padding: 0;
+      vertical-align: middle;
+      -webkit-user-drag: none;
+    }
 
-  button {
-    cursor: pointer;
+    button {
+      cursor: pointer;
+    }
   }
 }
