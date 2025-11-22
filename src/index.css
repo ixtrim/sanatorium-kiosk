@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* kiosk-hardening */
+html,body,#root { height:100%; }
+body { @apply bg-white text-black select-none; }
+* { touch-action: manipulation; }
+img { -webkit-user-drag: none; }

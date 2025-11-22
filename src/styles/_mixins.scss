@@ -1,0 +1,2 @@
+@mixin focus-ring { outline: none; box-shadow: 0 0 0 4px rgba(0,0,0,.24); }
+@mixin kiosk-title { font-size: clamp(24px, 2.2vw, 36px); line-height: 1.2; }
