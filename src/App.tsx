@@ -6,6 +6,7 @@ import Krynica from './pages/Krynica'
 import PdfView from './pages/PdfView'
 import GalleryPage from './pages/GalleryPage'
 import { useIdleReturn } from './hooks/useIdleReturn'
+import ScreenSaverProvider from './providers/ScreenSaverProvider'
 
 export default function App() {
   const nav = useNavigate()
@@ -13,14 +14,16 @@ export default function App() {
 
   return (
     <div className="h-full">
-      <Routes>
-        <Route path="/" element={<Home/>}/>
-        <Route path="/krynica" element={<Krynica/>}/>
-        <Route path="/ciekawostki" element={<Ciekawostki/>}/>
-        <Route path="/sanatorium" element={<Sanatorium/>}/>
-        <Route path="/pdf" element={<PdfView/>}/>
-        <Route path="/gallery" element={<GalleryPage/>}/>
-      </Routes>
+      <ScreenSaverProvider afterMs={10_000}>
+        <Routes>
+          <Route path="/" element={<Home/>}/>
+          <Route path="/krynica" element={<Krynica/>}/>
+          <Route path="/ciekawostki" element={<Ciekawostki/>}/>
+          <Route path="/sanatorium" element={<Sanatorium/>}/>
+          <Route path="/pdf" element={<PdfView/>}/>
+          <Route path="/gallery" element={<GalleryPage/>}/>
+        </Routes>
+      </ScreenSaverProvider>
     </div>
   )
 }

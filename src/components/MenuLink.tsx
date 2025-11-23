@@ -12,9 +12,9 @@ export default function MenuLinkCard({
   to, title, color='green', className,
 }: Props) {
   return (
-    <Link to={to} className={cn('main-link', `main-link--${color}`, className)}>
-      <div className="main-link__inner">
-        <h3 className="main-link__inner__title">{title}</h3>
+    <Link to={to} className={cn('menu-link', `menu-link--${color}`, className)}>
+      <div className="menu-link__inner">
+        <h3 className="menu-link__inner__title">{title}</h3>
       </div>
     </Link>
   )

@@ -10,14 +10,14 @@ export default function Ciekawostki() {
       <TopBar />
 
       <div className="main-menu">
-        <MenuLink to="/u-nas" title="Czy wiesz że?" color="green" />
-        <MenuLink to="/u-nas" title="Ćwiczenia" color="green" />
-        <MenuLink to="/u-nas" title="Porady" color="green" />
-        <MenuLink to="/u-nas" title="Historia uzdrowisk" color="green" />
-        <MenuLink to="/u-nas" title="Humor" color="green" />
-        <MenuLink to="/u-nas" title="Gra" color="green" />
-        <MenuLink to="/u-nas" title="Sanatoryjny savoir vivre" color="green" />
-        <MenuLink to="/u-nas" title="Kalendarium" color="green" />
+        <MenuLink to="/ciekawostki-czy-wiesz" title="Czy wiesz że?" color="green" />
+        <MenuLink to="/ciekawostki-cwiczenia" title="Ćwiczenia" color="green" />
+        <MenuLink to="/ciekawostki-porady" title="Porady" color="green" />
+        <MenuLink to="/ciekawostki-historia" title="Historia uzdrowisk" color="green" />
+        <MenuLink to="/ciekawostki-humor" title="Humor" color="green" />
+        <MenuLink to="/ciekawostki-gra" title="Gra" color="green" />
+        <MenuLink to="/ciekawostki-savoir-vivre" title="Sanatoryjny savoir vivre" color="green" />
+        <MenuLink to="/ciekawostki-kalendarium" title="Kalendarium" color="green" />
       </div>
 
       <BottomBackBar secondsLeft={seconds} />

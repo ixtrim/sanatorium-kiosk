@@ -1,0 +1,104 @@
+@layer components {
+  .screensaver {
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-6);
+    transition: opacity .25s ease;
+
+    &__center {
+      display: flex;
+      flex-direction: column;
+      align-self: center;
+      justify-self: center;
+      text-align: center;
+      width: 90%;
+      max-width: 90%;
+      gap: var(--space-1);
+      color: var(--surface);
+
+      &__logo {
+        width: 245px;
+        height: auto;
+        margin: 0 auto var(--space-10) auto;
+        padding: 0;
+
+        img {
+          max-width: 100%;
+        }
+      }
+
+      &__time {
+        margin: var(--space-6) auto var(--space-1) auto;
+        font-size: 3rem;
+        font-weight: 600;
+        letter-spacing: 3%;
+      }
+
+      &__date {
+        font-size: 2rem;
+        font-weight: 500;
+        letter-spacing: 3%;
+        text-transform: capitalize;
+        margin: var(--space-1) auto var(--space-10) auto;
+      }
+
+      &__weather {
+        display: grid;
+        place-items: center;
+        gap: 12px;
+        margin: var(--space-4) auto var(--space-10) auto;
+
+        &__icon {
+          width: 110px;
+          height: auto;
+        }
+
+        &__temp {
+          font-size: 2rem;
+        }
+      }
+
+      &__quote {
+        width: 100%;
+        margin: var(--space-4) auto var(--space-10) auto;
+        color: var(--surface);
+        text-align: center;
+        text-wrap: balance;
+        font-size: 3rem;
+        font-weight: 600;
+        text-transform: uppercase;
+
+        &::before {
+          content: "„";
+          font-size: 3rem;
+          vertical-align: bottom;
+          line-height: 100%;
+          margin-right: var(--space-2);
+        }
+
+        &::after {
+          content: "”";
+          font-size: 3rem;
+          vertical-align: top;
+          line-height: 0;
+          margin-left: var(--space-2);
+          position: relative;
+          top: 25px;
+        }
+      }
+    }
+  }
+
+  .screensaver--day {
+    background: #e58f0e;
+  }
+
+  .screensaver--night {
+    background: #0e5161;
+  }
+}

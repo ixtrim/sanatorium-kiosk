@@ -10,14 +10,14 @@ export default function Sanatorium() {
       <TopBar />
 
       <div className="main-menu">
-        <MenuLink to="/u-nas" title="Pokoje" color="orange" />
-        <MenuLink to="/u-nas" title="Wyżywienie" color="orange" />
-        <MenuLink to="/u-nas" title="Zabiegi" color="orange" />
-        <MenuLink to="/u-nas" title="Cennik" color="orange" />
-        <MenuLink to="/u-nas" title="Co myślisz o nas?" color="orange" />
-        <MenuLink to="/u-nas" title="Regulaminy" color="orange" />
-        <MenuLink to="/u-nas" title="Twój personel" color="orange" />
-        <MenuLink to="/u-nas" title="Nasi kuracjusze" color="orange" />
+        <MenuLink to="/sanatorium-pokoje" title="Pokoje" color="orange" />
+        <MenuLink to="/sanatorium-wyzywienie" title="Wyżywienie" color="orange" />
+        <MenuLink to="/sanatorium-zabiegi" title="Zabiegi" color="orange" />
+        <MenuLink to="/sanatorium-cennik" title="Cennik" color="orange" />
+        <MenuLink to="/sanatorium-opinie" title="Co myślisz o nas?" color="orange" />
+        <MenuLink to="/sanatorium-regulaminy" title="Regulaminy" color="orange" />
+        <MenuLink to="/sanatorium-personel" title="Twój personel" color="orange" />
+        <MenuLink to="/sanatorium-kuracjusze" title="Nasi kuracjusze" color="orange" />
       </div>
 
       <BottomBackBar secondsLeft={seconds} />
