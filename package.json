@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "classnames": "^2.5.1",
+    "clsx": "^2.1.1",
     "dayjs": "^1.11.19",
     "pdfjs-dist": "^5.4.394",
     "photoswipe": "^5.4.4",

@@ -1,0 +1,42 @@
+@layer components {
+  .bottom-back-bar {
+    width: calc(100% - 2 * var(--space-4));
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--brand-gray);
+    padding: var(--space-4);
+    border-radius: 24px;
+
+    &__back {
+      border: none;
+      background: none;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: var(--space-4);
+
+      &__icon {
+        vertical-align: middle;
+      }
+
+      &__label {
+        font-weight: 600;
+        font-size: 2rem;
+      }
+    }
+
+    &__auto {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: var(--space-4);
+
+      &__text {
+        font-weight: 400;
+        font-size: 1.5rem;
+      }
+    }
+  }
+}

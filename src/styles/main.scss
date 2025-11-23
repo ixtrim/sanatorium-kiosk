@@ -2,8 +2,10 @@
 @use './mixins';
 @use './base';
 @use './components/buttons';
+@use './components/main-link';
 @use './components/layout';
 @use './components/top-bar';
+@use './components/bottom-back-bar';
 
 @tailwind base;
 @tailwind components;

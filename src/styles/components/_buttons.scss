@@ -4,17 +4,38 @@
   .kiosk-btn {
     @apply rounded-2xl font-semibold text-white select-none;
     @include kiosk-title;
-    display:block; padding:var(--space-8); text-align:center;
-    box-shadow:var(--shadow-soft);
+    display: block;
+    padding: var(--space-8);
+    text-align: center;
+    box-shadow: var(--shadow-soft);
     transition: transform .06s ease, filter .15s ease;
-    &:active { transform: scale(.99); }
-    &:focus-visible { @include focus-ring; }
-  }
-  .kiosk-btn--green  { background: var(--brand-green); }
-  .kiosk-btn--orange { background: var(--brand-orange); }
-  .kiosk-btn--blue   { background: var(--brand-blue); }
 
-  .kiosk-back { position:fixed; left:1rem; bottom:1rem; z-index:1000;
+    &:active {
+      transform: scale(.99);
+    }
+
+    &:focus-visible {
+      @include focus-ring;
+    }
+  }
+
+  .kiosk-btn--green {
+    background: var(--brand-green);
+  }
+
+  .kiosk-btn--orange {
+    background: var(--brand-orange);
+  }
+
+  .kiosk-btn--blue {
+    background: var(--brand-blue);
+  }
+
+  .kiosk-back {
+    position: fixed;
+    left: 1rem;
+    bottom: 1rem;
+    z-index: 1000;
     @apply bg-black/70 text-white rounded-xl px-5 py-3;
   }
 }
