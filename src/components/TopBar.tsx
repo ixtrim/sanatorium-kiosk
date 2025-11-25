@@ -14,7 +14,7 @@ function usePolandClock(updateEveryMs = 1000) {
 }
 
 export default function TopBar() {
-  const logoUrl = `${import.meta.env.BASE_URL}media/brand/logo-orange.svg`
+  const logoUrl = `${import.meta.env.BASE_URL}media/brand/logo-orange.png`
   const iconUrl = `${import.meta.env.BASE_URL}media/icons/icon_black_cloud.svg`
   const { clock, dateLabel } = usePolandClock(1000)
   const weather = useKrynicaWeather(10 * 60 * 1000)

@@ -2,13 +2,17 @@
 
 @layer components {
   .kiosk-btn {
-    @apply rounded-2xl font-semibold text-white select-none;
-    @include kiosk-title;
+    border-radius: 12px;
+    background: transparent;
+    color: var(--text);
+    border: 2px solid var(--text);
     display: block;
-    padding: var(--space-8);
+    padding: 12px 24px;
     text-align: center;
-    box-shadow: var(--shadow-soft);
+    font-size: 1.5rem;
+    letter-spacing: 3%;
     transition: transform .06s ease, filter .15s ease;
+    margin: 0 auto;
 
     &:active {
       transform: scale(.99);

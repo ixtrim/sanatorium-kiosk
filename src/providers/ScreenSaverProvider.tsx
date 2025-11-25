@@ -3,7 +3,6 @@ import ScreenSaver from '../components/ScreenSaver'
 
 type Props = {
   children: React.ReactNode
-  /** when to show the screensaver after last user activity */
   afterMs?: number
 }
 export const ScreenSaverContext = React.createContext<{ active: boolean }>({ active: false })

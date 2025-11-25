@@ -43,11 +43,11 @@ export default function ScreenSaver({ visible }: { visible: boolean }) {
     cacheKey: `greetings:${gid}`,
   })
 
-  const logoUrl    = `${import.meta.env.BASE_URL}media/brand/logo-white.svg`
+  const logoUrl    = `${import.meta.env.BASE_URL}media/brand/logo-white.png`
   const weatherUrl = `${import.meta.env.BASE_URL}media/icons/icon_white_cloud.svg`
 
-  const fallbackDay   = '„ZDROWIE ZACZYNA SIĘ OD CHWILI SPOKOJU.”'
-  const fallbackNight = '„SANATORIUM – MIEJSCE, GDZIE REGENERUJE SIĘ CIAŁO I DUSZA.”'
+  const fallbackDay   = 'ZDROWIE ZACZYNA SIĘ OD CHWILI SPOKOJU.'
+  const fallbackNight = 'SANATORIUM – MIEJSCE, GDZIE REGENERUJE SIĘ CIAŁO I DUSZA.'
   const quote = greeting || (mode === 'day' ? fallbackDay : fallbackNight)
 
   return (

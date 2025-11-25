@@ -4,24 +4,21 @@ import Papa from 'papaparse'
 type Row = { greeting_text?: string | null }
 
 type Options = {
-  /** refetch interval; default 1h */
   refreshMs?: number
-  /** storage key suffix (useful if you have multiple sheets) */
   cacheKey?: string
+  pickKey?: any
 }
 
-/** Reads a public Google Sheet (CSV export) and returns a random greeting_text */
 export function useSheetGreeting(sheetId: string, gid: string, opts: Options = {}) {
-  const { refreshMs = 60 * 60 * 1000, cacheKey = `${sheetId}:${gid}` } = opts
+  const { refreshMs = 60 * 60 * 1000, cacheKey = `${sheetId}:${gid}`, pickKey } = opts
   const [rows, setRows] = useState<Row[] | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  // try local cache first (for offline)
   useEffect(() => {
     const cached = localStorage.getItem(`quotes:${cacheKey}`)
     if (cached) {
-      try { setRows(JSON.parse(cached)) } catch {}
+      try { setRows(JSON.parse(cached) as Row[]) } catch {}
     }
   }, [cacheKey])
 
@@ -32,8 +29,6 @@ export function useSheetGreeting(sheetId: string, gid: string, opts: Options = {
       setLoading(true)
       setError(null)
 
-      // CSV export endpoint; works if the sheet is "Anyone with the link – Viewer"
-      // If you hit CORS in dev, see vite proxy note below.
       const directUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=${gid}`
 
       try {
@@ -41,17 +36,21 @@ export function useSheetGreeting(sheetId: string, gid: string, opts: Options = {
         if (!res.ok) throw new Error(`HTTP ${res.status}`)
         const text = await res.text()
 
-        const parsed = Papa.parse<Row>(text, { header: true, skipEmptyLines: 'greedy' })
-        const clean = (parsed.data || [])
-          .map(r => ({ greeting_text: (r as any).greeting_text as string | undefined }))
-          .filter(r => r.greeting_text && r.greeting_text.trim().length > 0)
+        const parsed = Papa.parse<Row>(text, {
+          header: true,
+          skipEmptyLines: true,
+        })
+
+        const clean: Row[] = (parsed.data || [])
+          .map((r: Row) => ({ greeting_text: r.greeting_text }))
+          .filter((r: Row) => !!r.greeting_text && r.greeting_text!.trim().length > 0)
 
         if (!aborted) {
           setRows(clean)
           localStorage.setItem(`quotes:${cacheKey}`, JSON.stringify(clean))
         }
-      } catch (e: any) {
-        if (!aborted) setError(e?.message || 'fetch_error')
+      } catch (e: unknown) {
+        if (!aborted) setError((e as Error)?.message ?? 'fetch_error')
       } finally {
         if (!aborted) setLoading(false)
       }
@@ -62,12 +61,11 @@ export function useSheetGreeting(sheetId: string, gid: string, opts: Options = {
     return () => { aborted = true; clearInterval(id) }
   }, [sheetId, gid, refreshMs, cacheKey])
 
-  // pick random greeting
   const greeting = useMemo(() => {
     if (!rows || rows.length === 0) return null
     const i = Math.floor(Math.random() * rows.length)
     return rows[i].greeting_text!.trim()
-  }, [rows])
+  }, [rows, pickKey])
 
   return { greeting, loading, error }
 }

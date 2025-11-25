@@ -10,8 +10,8 @@ export default function Krynica() {
       <TopBar />
 
       <div className="main-menu">
-        <MenuLink to="/gallery" title="Najbliższe wydarzenia" color="blue" />
-        <MenuLink to="/pdf?url=/media/przyklad.pdf" title="Atrakcje latem" color="blue" />
+        <MenuLink to="/krynica-wydarzenia" title="Najbliższe wydarzenia" color="blue" />
+        <MenuLink to="/krynica-atrakcje-lato" title="Atrakcje latem" color="blue" />
         <MenuLink to="/krynica-atrakcje-zima" title="Atrakcje zimą" color="blue" />
         <MenuLink to="/krynica-atrakcje-caloroczne" title="Atrakcje całoroczne" color="blue" />
         <MenuLink to="/krynica-kosciol" title="Kościół" color="blue" />

@@ -15,7 +15,7 @@ export default function Ciekawostki() {
         <MenuLink to="/ciekawostki-porady" title="Porady" color="green" />
         <MenuLink to="/ciekawostki-historia" title="Historia uzdrowisk" color="green" />
         <MenuLink to="/ciekawostki-humor" title="Humor" color="green" />
-        <MenuLink to="/ciekawostki-gra" title="Gra" color="green" />
+        <MenuLink to="/ciekawostki-gry" title="Gry" color="green" />
         <MenuLink to="/ciekawostki-savoir-vivre" title="Sanatoryjny savoir vivre" color="green" />
         <MenuLink to="/ciekawostki-kalendarium" title="Kalendarium" color="green" />
       </div>

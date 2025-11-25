@@ -14,8 +14,7 @@ export default function BottomBackBar({
   className,
 }: Props) {
   const nav = useNavigate()
-
-  // URLs to your public icons
+  
   const backIconUrl  = `${import.meta.env.BASE_URL}media/icons/icon_black_arrow-left.svg`;
   const clockIconUrl = `${import.meta.env.BASE_URL}media/icons/icon_black_clock.svg`;
 

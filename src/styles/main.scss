@@ -1,6 +1,7 @@
 @use './tokens';
 @use './mixins';
 @use './base';
+
 @use './components/buttons';
 @use './components/main-link';
 @use './components/menu-link';
@@ -8,6 +9,14 @@
 @use './components/top-bar';
 @use './components/bottom-back-bar';
 @use './components/screensaver';
+@use './components/view-heading';
+@use './components/view-content';
+@use './components/regulamin';
+
+@use './views/sanatorium-regulaminy';
+@use './views/sanatorium-opinie';
+@use './views/sanatorium-zabiegi';
+@use './views/sanatorium-pokoje';
 
 @tailwind base;
 @tailwind components;

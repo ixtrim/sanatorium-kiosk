@@ -1,0 +1,31 @@
+@layer components {
+  .view-heading {
+    width: calc(100% - 48px);
+    margin-bottom: var(--space-8);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: var(--space-6);
+    border-radius: 24px;
+
+    &__title {
+      font-size: 2.5rem;
+      font-weight: 600;
+      letter-spacing: 3%;
+      color: var(--surface);
+    }
+
+    &--green {
+      background: var(--brand-green);
+    }
+
+    &--orange {
+      background: var(--brand-orange);
+    }
+
+    &--blue {
+      background: var(--brand-blue);
+    }
+  }
+}
