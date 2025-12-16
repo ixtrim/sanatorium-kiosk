@@ -1,9 +1,8 @@
 @layer components {
-  /* must be top-level inside the layer */
   @keyframes screensaver-breathe {
     0%, 50%, 100% { filter: none; opacity: 0; }
-    25% { filter: brightness(1.03) saturate(1.02); opacity: .20; } /* lighter */
-    75% { filter: brightness(0.97) saturate(0.98); opacity: .40; } /* darker */
+    25% { filter: brightness(1.03) saturate(1.02); opacity: .20; }
+    75% { filter: brightness(0.97) saturate(0.98); opacity: .40; }
   }
 
   .screensaver {
@@ -24,7 +23,7 @@
       background: white;
       pointer-events: none;
       z-index: 2;
-      animation: screensaver-breathe 6s ease-in-out infinite;
+      animation: screensaver-breathe 9s ease-in-out infinite;
       will-change: filter;
     }
 

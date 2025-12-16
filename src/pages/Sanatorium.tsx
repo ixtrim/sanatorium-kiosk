@@ -16,7 +16,7 @@ export default function Sanatorium() {
         <MenuLink to="/sanatorium-cennik" title="Cenniki" color="orange" />
         <MenuLink to="/sanatorium-opinie" title="Co myślisz o nas?" color="orange" />
         <MenuLink to="/sanatorium-regulaminy" title="Regulaminy" color="orange" />
-        <MenuLink to="/sanatorium-personel" title="Twój personel" color="orange" />
+        <MenuLink to="/sanatorium-kalendarium" title="Z kalendarium sanatorium" color="orange" />
         <MenuLink to="/sanatorium-kuracjusze" title="Nasi kuracjusze" color="orange" />
       </div>
 
