@@ -1,105 +1,86 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import TopBar from '../components/TopBar'
 import BottomBackBar from '../components/BottomBackBar'
 import ViewHeading from '../components/ViewHeading'
 import { useIdleSecondsLeft } from '../hooks/useIdleSecondsLeft'
-import PdfCanvasViewer from '../components/PdfCanvasViewer'
+import { useGSheetRowsCsv } from '../hooks/useGSheetRowsCsv'
+import TypewriterText from '../components/TypewriterText'
+
+const FILE_ID = '1iIoeZYMJ6K0tGunOtGphW-Ud5K1S_d0VJO2ozB7YW7E'
+const GID = '975197090'
 
 export default function KrynicaAtrakcjeLatem() {
   const seconds = useIdleSecondsLeft(60_000)
+
+  const { rows, loading, error } = useGSheetRowsCsv(FILE_ID, GID)
+  const [idx, setIdx] = useState(0)
+  useEffect(() => { if (!loading) setIdx(0) }, [loading])
+
+  const item = rows[idx]
+  const canPrev = idx > 0
+  const canNext = idx < rows.length - 1
   
-  const url = `${import.meta.env.BASE_URL}media/atrakcje-lato.pdf`
-  const title = 'Atrakcje latem'
-
-  const listRef = useRef<HTMLDivElement>(null)
-
-  const [canUp, setCanUp] = useState(false)
-  const [canDown, setCanDown] = useState(false)
-
-  const IconUpUrl   = `${import.meta.env.BASE_URL}media/icons/icon_black_up.svg`
-  const IconDownUrl = `${import.meta.env.BASE_URL}media/icons/icon_black_arrow-down.svg`
-
-  const updateScrollState = () => {
-    const el = listRef.current
-    if (!el) return
-    const max = el.scrollHeight - el.clientHeight
-    const eps = 1
-    setCanUp(el.scrollTop > eps)
-    setCanDown(el.scrollTop < max - eps)
-  }
-
-  const scrollBy = (dir: 'up' | 'down') => {
-    const el = listRef.current
-    if (!el) return
-    const step = Math.round(el.clientHeight * 0.9)
-    el.scrollBy({ top: dir === 'up' ? -step : step, behavior: 'smooth' })
-    requestAnimationFrame(() => setTimeout(updateScrollState, 250))
-  }
-
-  useEffect(() => {
-    const el = listRef.current
-    if (!el) return
-    
-    updateScrollState()
-
-    const onScroll = () => updateScrollState()
-    el.addEventListener('scroll', onScroll, { passive: true })
-    
-    const onWheel = (e: WheelEvent) => {
-      const canScrollUp = e.deltaY < 0 && canUp
-      const canScrollDown = e.deltaY > 0 && canDown
-      if (canScrollUp || canScrollDown) {
-        e.preventDefault()
-        el.scrollBy({ top: e.deltaY, behavior: 'auto' })
-      }
-    }
-    el.addEventListener('wheel', onWheel, { passive: false })
-    
-    const ro = new ResizeObserver(updateScrollState)
-    ro.observe(el)
-    
-    const mo = new MutationObserver(updateScrollState)
-    mo.observe(el, { childList: true, subtree: true })
-
-    return () => {
-      el.removeEventListener('scroll', onScroll)
-      el.removeEventListener('wheel', onWheel)
-      ro.disconnect()
-      mo.disconnect()
-    }
-  }, [canUp, canDown])
+  const [imgOk, setImgOk] = useState(true)
+  useEffect(() => { setImgOk(true) }, [idx])
 
   return (
-    <div className="kiosk-container pdf-layout">
+    <div className="kiosk-container">
       <TopBar />
-      <ViewHeading title={title} color="blue" />
+      <div className="view-krynica-wycieczki">
+        <ViewHeading title="Atrakcje latem" color="blue" />
 
-      <section className="content-container-pdf-short">
 
-      <div className="pdf-zone">
-        <button
-          className={`pdf-scroll-btn pdf-scroll-btn--top ${!canUp ? 'is-disabled' : ''}`}
-          onClick={() => scrollBy('up')}
-        >
-          <img src={IconUpUrl} alt="" width={45} height={45} className="bottom-back-bar__icon-img" draggable={false} />
-          <span>PRZEWIŃ W GÓRĘ</span>
-        </button>
+        <div className="view-content">
+          {loading && <p>Ładowanie…</p>}
+          {error && <p>Błąd: {error}</p>}
+          {!loading && !error && !item && <p>Brak treści do wyświetlenia.</p>}
 
-        <div className="pdf-scrollable" ref={listRef}>
-          <PdfCanvasViewer fileUrl={url} containerRef={listRef} />
+          {!loading && !error && item && (
+            <article className="row-article">
+              {item.image && imgOk && (
+                <figure className="row-image">
+                  <img
+                    src={item.image}
+                    alt=""
+                    onError={() => setImgOk(false)}
+                    loading="eager"
+                    draggable={false}
+                  />
+                </figure>
+              )}
+
+              {item.title && <h2 className="row-title">{item.title}</h2>}
+              {item.content && <div className="row-text preline">
+                <TypewriterText
+                  text={item.content ?? ''}
+                  className="view-content-text preline"
+                  speedMs={18}
+                  startDelayMs={80}
+                />
+              </div>}
+            </article>
+          )}
+          
+          {!loading && rows.length > 0 && (
+            <div className="row-nav">
+              <button className="kiosk-btn kiosk-btn--outline" onClick={() => canPrev && setIdx(i => Math.max(0, i - 1))} disabled={!canPrev} >
+                Wstecz
+              </button>
+
+              <div className="row-counter">
+                {rows.length > 0 ? `${idx + 1} / ${rows.length}` : '0 / 0'}
+              </div>
+
+              <button className="kiosk-btn kiosk-btn--outline" onClick={() => canNext && setIdx(i => Math.min(rows.length - 1, i + 1))}
+                disabled={!canNext} >
+                Dalej
+              </button>
+            </div>
+          )}
         </div>
 
-        <button
-          className={`pdf-scroll-btn pdf-scroll-btn--bottom ${!canDown ? 'is-disabled' : ''}`}
-          onClick={() => scrollBy('down')}
-        >
-          <img src={IconDownUrl} alt="" width={45} height={45} className="bottom-back-bar__icon-img" draggable={false} />
-          <span>PRZEWIŃ W DÓŁ</span>
-        </button>
+
       </div>
-
-      </section>
-
       <BottomBackBar secondsLeft={seconds} />
     </div>
   )
