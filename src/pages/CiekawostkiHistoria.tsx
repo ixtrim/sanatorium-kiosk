@@ -4,7 +4,7 @@ import BottomBackBar from '../components/BottomBackBar'
 import ViewHeading from '../components/ViewHeading'
 import { useIdleSecondsLeft } from '../hooks/useIdleSecondsLeft'
 import { useGSheetRandomContentCsv } from '../hooks/useGSheetRandomContentCsv'
-import AnimatedText from '../components/AnimatedText'
+import TypewriterText from '../components/TypewriterText'
 
 const FILE_ID = '1iIoeZYMJ6K0tGunOtGphW-Ud5K1S_d0VJO2ozB7YW7E'
 const GID = '922194573'
@@ -119,7 +119,7 @@ export default function CiekawostkiHistoria() {
           {!loading && !error && !reached && item && (
             <article key={idx ?? 0}>
               {item.title && <h2 className="view-content-title">{item.title}</h2>}
-              <AnimatedText text={item.content} className="view-content-text preline" />
+              <TypewriterText text={item.content} className="view-content-text preline" />
             </article>
           )}
         </div>

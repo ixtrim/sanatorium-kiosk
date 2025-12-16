@@ -4,6 +4,7 @@ import BottomBackBar from '../components/BottomBackBar'
 import ViewHeading from '../components/ViewHeading'
 import { useIdleSecondsLeft } from '../hooks/useIdleSecondsLeft'
 import { useGSheetRowsCsv } from '../hooks/useGSheetRowsCsv'
+import TypewriterText from '../components/TypewriterText'
 
 const FILE_ID = '1iIoeZYMJ6K0tGunOtGphW-Ud5K1S_d0VJO2ozB7YW7E'
 const GID = '845445275'
@@ -50,7 +51,14 @@ export default function SanatoriumPersonel() {
                 )}
 
                 {item.title && <h2 className="row-title">{item.title}</h2>}
-                {item.content && <div className="row-text preline">{item.content}</div>}
+                {item.content && <div className="row-text preline">
+                  <TypewriterText
+                    text={item.content ?? ''}
+                    className="view-content-text preline"
+                    speedMs={18}
+                    startDelayMs={80}
+                  />
+                </div>}
               </article>
             )}
             

@@ -4,6 +4,7 @@ import BottomBackBar from '../components/BottomBackBar'
 import ViewHeading from '../components/ViewHeading'
 import { useIdleSecondsLeft } from '../hooks/useIdleSecondsLeft'
 import { useGSheetRandomContentCsv } from '../hooks/useGSheetRandomContentCsv'
+import TypewriterText from '../components/TypewriterText'
 
 const FILE_ID = '1TqSspYR7J_rKmIp5N14p7RgyPQYSpIqN5kFsl6PLflI'
 const GID = '1032664144'
@@ -118,7 +119,12 @@ export default function CiekawostkiSavoirVivre() {
             {!loading && !error && !reached && item && (
               <article>
                 {item.title && <h2 className="view-content-title">{item.title}</h2>}
-                <p className="view-content-text preline">{item.content}</p>
+                <TypewriterText
+                  text={item.content ?? ''}
+                  className="view-content-text preline"
+                  speedMs={18}
+                  startDelayMs={80}
+                />
               </article>
             )}
           </div>

@@ -5,6 +5,7 @@ import ViewHeading from '../components/ViewHeading'
 import { useIdleSecondsLeft } from '../hooks/useIdleSecondsLeft'
 import { useRoomsFromSheet } from '../hooks/useRoomsFromSheet'
 import RoomCarousel from '../components/RoomCarousel'
+import TypewriterText from '../components/TypewriterText'
 
 const FILE_ID = '1iIoeZYMJ6K0tGunOtGphW-Ud5K1S_d0VJO2ozB7YW7E'
 const GID = '154932015'
@@ -34,7 +35,14 @@ export default function SanatoriumPokojePietroPokoj() {
         {!loading && !error && room && (
           <article className="room-card">
             {room.title && <h2 className="room-title">{room.title}</h2>}
-            {room.content && <div className="room-desc preline">{room.content}</div>}
+            {room.content && <div className="room-desc preline">
+              <TypewriterText
+                text={room.content}
+                className="view-content-text preline"
+                speedMs={18}
+                startDelayMs={80}
+              />
+            </div>}
             {room.images.length > 0 && (
               <RoomCarousel images={room.images} title={room.title || `Pokój ${room.roomNumber}`} />
             )}

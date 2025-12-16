@@ -4,6 +4,7 @@ import BottomBackBar from '../components/BottomBackBar'
 import ViewHeading from '../components/ViewHeading'
 import { useIdleSecondsLeft } from '../hooks/useIdleSecondsLeft'
 import { useUpcomingEventsCsv } from '../hooks/useUpcomingEventsCsv'
+import TypewriterText from '../components/TypewriterText'
 
 const FILE_ID = '1TqSspYR7J_rKmIp5N14p7RgyPQYSpIqN5kFsl6PLflI'
 const GID = '0'
@@ -46,7 +47,14 @@ export default function KrynicaWydarzenia() {
                 <li key={idx} className="event-item">
                   <div className="event-date">{current.dateLabel}</div>
                   {current.title && <h3 className="event-title">{current.title}</h3>}
-                  {current.summary && <p className="event-description preline">{current.summary}</p>}
+                  {current.summary && <p className="event-description preline">
+                    <TypewriterText
+                      text={current.summary ?? ''}
+                      className="view-content-text preline"
+                      speedMs={18}
+                      startDelayMs={80}
+                    />
+                  </p>}
                 </li>
               </ul>
 

@@ -4,7 +4,7 @@ import BottomBackBar from '../components/BottomBackBar'
 import ViewHeading from '../components/ViewHeading'
 import { useIdleSecondsLeft } from '../hooks/useIdleSecondsLeft'
 import { useGSheetRandomContent } from '../hooks/useGSheetRandomContent'
-import AnimatedText from '../components/AnimatedText'
+import TypewriterText from '../components/TypewriterText'
 
 const FILE_ID = '1TqSspYR7J_rKmIp5N14p7RgyPQYSpIqN5kFsl6PLflI'
 const GID = '492714709'
@@ -103,7 +103,7 @@ export default function SanatoriumKuracjusze() {
         {!loading && !error && !reached && item && (
           <article key={rev}>
             {item.title && <h2 className="view-content-title">{item.title}</h2>}
-            <AnimatedText text={item.content ?? ''} className="view-content-text" />
+            <TypewriterText text={item.content ?? ''} className="view-content-text" />
           </article>
         )}
       </div>

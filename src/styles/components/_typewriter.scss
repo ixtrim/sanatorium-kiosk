@@ -1,0 +1,24 @@
+@layer components {
+  .typewriter {
+    /* zachowaj nowe linie z arkusza */
+    white-space: pre-line;
+    position: relative;
+  }
+
+  .typewriter__cursor {
+    display: inline-block;
+    width: 0.6ch;
+    margin-left: 0.05em;
+    animation: typewriter-caret 1s steps(1, end) infinite;
+    opacity: 1;
+    color: var(--brand-grey-light);
+  }
+
+  @keyframes typewriter-caret {
+    50% { opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .typewriter__cursor { animation: none; }
+  }
+}

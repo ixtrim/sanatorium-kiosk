@@ -4,6 +4,7 @@ import BottomBackBar from '../components/BottomBackBar'
 import ViewHeading from '../components/ViewHeading'
 import { useIdleSecondsLeft } from '../hooks/useIdleSecondsLeft'
 import { useKalendariumToday } from '../hooks/useKalendariumToday'
+import TypewriterText from '../components/TypewriterText'
 
 const FILE_ID = '1TqSspYR7J_rKmIp5N14p7RgyPQYSpIqN5kFsl6PLflI'
 const GID = '747899636' // Kalendarium tab
@@ -53,7 +54,14 @@ export default function CiekawostkiKalendarium() {
               <ul className="view-content-calendarium-list">
                 <li key={idx} className="calendarium-list-item">
                   {current.year ? <div className="event-date">{todayLabelPl()} {current.year}</div> : null}
-                  <div className="event-text preline">{current.content}</div>
+                  <div className="event-text preline">
+                    <TypewriterText
+                      text={current.content ?? ''}
+                      className="view-content-text preline"
+                      speedMs={18}
+                      startDelayMs={80}
+                    />
+                  </div>
                 </li>
               </ul>
 
