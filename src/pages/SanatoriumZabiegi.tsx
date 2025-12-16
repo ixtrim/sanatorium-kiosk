@@ -3,107 +3,83 @@ import TopBar from '../components/TopBar'
 import BottomBackBar from '../components/BottomBackBar'
 import ViewHeading from '../components/ViewHeading'
 import { useIdleSecondsLeft } from '../hooks/useIdleSecondsLeft'
+import { useGSheetRowsCsv } from '../hooks/useGSheetRowsCsv'
+import TypewriterText from '../components/TypewriterText'
 
-type Item = { name: string; url: string }
+const FILE_ID = '1iIoeZYMJ6K0tGunOtGphW-Ud5K1S_d0VJO2ozB7YW7E'
+const GID = '1601942429'
 
 export default function SanatoriumZabiegi() {
   const seconds = useIdleSecondsLeft(60_000)
 
-  const base = `${import.meta.env.BASE_URL}media/zabiegi/`
-  const [items, setItems] = useState<Item[]>([])
-  const [error, setError] = useState<string | null>(null)
+  const { rows, loading, error } = useGSheetRowsCsv(FILE_ID, GID)
   const [idx, setIdx] = useState(0)
-  const [imgOk, setImgOk] = useState(true)
-  
-  useEffect(() => {
-    fetch(base + 'manifest.json', { cache: 'no-store' })
-      .then(r => r.json())
-      .then((files: string[]) => {
-        const list = files.map(fn => ({
-          url: base + fn,
-          name: fn
-            .replace(/\.[^.]+$/, '')
-            .replace(/[_-]+/g, ' ')
-            .replace(/\s+/g, ' ')
-            .trim()
-        }))
-        setItems(list)
-        setIdx(0)
-      })
-      .catch(e => setError(e.message))
-  }, [base])
-  
-  const item = items[idx]
+  useEffect(() => { if (!loading) setIdx(0) }, [loading])
+
+  const item = rows[idx]
   const canPrev = idx > 0
-  const canNext = idx < items.length - 1
+  const canNext = idx < rows.length - 1
   
-  useEffect(() => {
-    if (!item) return
-    const preload = (i: number) => {
-      if (i >= 0 && i < items.length) {
-        const im = new Image()
-        im.src = items[i].url
-      }
-    }
-    preload(idx + 1)
-    preload(idx - 1)
-  }, [idx, items, item])
-  
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowLeft' && canPrev) setIdx(i => i - 1)
-      if (e.key === 'ArrowRight' && canNext) setIdx(i => i + 1)
-    }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [canPrev, canNext])
-  
+  const [imgOk, setImgOk] = useState(true)
   useEffect(() => { setImgOk(true) }, [idx])
 
   return (
-    <div className="kiosk-container view-sanatorium-zabiegi">
+    <div className="kiosk-container">
       <TopBar />
-      <ViewHeading title="Zabiegi" color="orange" />
+      <div className="view-sanatorium-wyzywienie">
+        <ViewHeading title="Zabiegi" color="orange" />
+        
+        <section className="content-container">
+          <div className="view-content">
+            {loading && <p>Ładowanie…</p>}
+            {error && <p>Błąd: {error}</p>}
+            {!loading && !error && !item && <p>Brak treści do wyświetlenia.</p>}
 
-      <section className="content-container">
-
-        <div className="zabiegi-viewer">
-          {error && <p>Błąd: {error}</p>}
-          {!error && items.length === 0 && <p>Brak obrazów w katalogu „zabiegi”.</p>}
-
-          {!error && item && (
-            <>
-              <h2 className="zabieg__title">{item.name}</h2>
-
-              <figure className="zabieg__figure">
-                {imgOk ? (
-                  <img
-                    src={item.url}
-                    alt={item.name}
-                    loading="eager"
-                    draggable={false}
-                    onError={() => setImgOk(false)}
-                  />
-                ) : (
-                  <div className="zabieg__img-error">Nie udało się załadować obrazu.</div>
+            {!loading && !error && item && (
+              <article className="row-article">
+                {item.image && imgOk && (
+                  <figure className="row-image">
+                    <img
+                      src={item.image}
+                      alt=""
+                      onError={() => setImgOk(false)}
+                      loading="eager"
+                      draggable={false}
+                    />
+                  </figure>
                 )}
-              </figure>
 
-              <div className="zabiegi-nav">
-                <button className="kiosk-btn kiosk-btn--outline" onClick={() => canPrev && setIdx(i => i - 1)} disabled={!canPrev} >Wstecz</button>
+                {item.title && <h2 className="row-title">{item.title}</h2>}
+                {item.content && <div className="row-text preline">
+                  <TypewriterText
+                    text={item.content ?? ''}
+                    className="view-content-text preline"
+                    speedMs={18}
+                    startDelayMs={80}
+                  />
+                </div>}
+              </article>
+            )}
+            
+            {!loading && rows.length > 0 && (
+              <div className="row-nav">
+                <button className="kiosk-btn kiosk-btn--outline" onClick={() => canPrev && setIdx(i => Math.max(0, i - 1))} disabled={!canPrev} >
+                  Wstecz
+                </button>
 
-                <div className="zabiegi-counter">
-                  {idx + 1} / {items.length}
+                <div className="row-counter">
+                  {rows.length > 0 ? `${idx + 1} / ${rows.length}` : '0 / 0'}
                 </div>
 
-                <button className="kiosk-btn kiosk-btn--outline" onClick={() => canNext && setIdx(i => i + 1)} disabled={!canNext} >Dalej</button>
+                <button className="kiosk-btn kiosk-btn--outline" onClick={() => canNext && setIdx(i => Math.min(rows.length - 1, i + 1))}
+                  disabled={!canNext} >
+                  Dalej
+                </button>
               </div>
-            </>
-          )}
-        </div>
-
-      </section>
-
+            )}
+          </div>
+        </section>
+      </div>
       <BottomBackBar secondsLeft={seconds} />
     </div>
   )
