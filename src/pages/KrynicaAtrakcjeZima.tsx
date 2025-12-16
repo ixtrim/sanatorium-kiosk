@@ -73,6 +73,8 @@ export default function KrynicaAtrakcjeZima() {
       <TopBar />
       <ViewHeading title={title} color="blue" />
 
+      <section className="content-container-pdf-short">
+
       <div className="pdf-zone">
         <button
           className={`pdf-scroll-btn pdf-scroll-btn--top ${!canUp ? 'is-disabled' : ''}`}
@@ -94,6 +96,8 @@ export default function KrynicaAtrakcjeZima() {
           <span>PRZEWIŃ W DÓŁ</span>
         </button>
       </div>
+
+      </section>
 
       <BottomBackBar secondsLeft={seconds} />
     </div>

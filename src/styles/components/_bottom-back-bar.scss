@@ -1,6 +1,7 @@
 @layer components {
   .bottom-back-bar {
-    width: calc(100% - 2 * var(--space-4));
+    max-width: 1200px;
+    width: calc(100% - 4 * var(--space-4));
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -8,6 +9,11 @@
     background: var(--brand-gray);
     padding: var(--space-4);
     border-radius: 24px;
+    position: fixed;
+    bottom: calc(2 * var(--space-4));
+    left: 50%;
+    transform: translateX(-50%);
+    right: var(--space-4);
 
     &__back {
       border: none;
@@ -16,6 +22,7 @@
       flex-direction: row;
       align-items: center;
       gap: var(--space-4);
+      text-decoration: none;
 
       &__icon {
         vertical-align: middle;
@@ -24,6 +31,8 @@
       &__label {
         font-weight: 600;
         font-size: 2rem;
+        color: var(--text);
+        text-decoration: none;
       }
     }
 

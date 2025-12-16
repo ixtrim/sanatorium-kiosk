@@ -5,7 +5,7 @@ import ViewHeading from '../components/ViewHeading'
 import { useIdleSecondsLeft } from '../hooks/useIdleSecondsLeft'
 import { useGSheetRowsCsv } from '../hooks/useGSheetRowsCsv'
 
-const FILE_ID = '1TqSspYR7J_rKmIp5N14p7RgyPQYSpIqN5kFsl6PLflI'
+const FILE_ID = '1iIoeZYMJ6K0tGunOtGphW-Ud5K1S_d0VJO2ozB7YW7E'
 const GID = '845445275'
 
 export default function SanatoriumPersonel() {
@@ -28,49 +28,54 @@ export default function SanatoriumPersonel() {
       <div className="view-sanatorium-personel">
         <ViewHeading title="Personel" color="orange" />
 
-        <div className="view-content">
-          {loading && <p>Ładowanie…</p>}
-          {error && <p>Błąd: {error}</p>}
-          {!loading && !error && !item && <p>Brak treści do wyświetlenia.</p>}
+        <section className="content-container">
 
-          {!loading && !error && item && (
-            <article className="row-article">
-              {item.image && imgOk && (
-                <figure className="row-image">
-                  <img
-                    src={item.image}
-                    alt=""
-                    onError={() => setImgOk(false)}
-                    loading="eager"
-                    draggable={false}
-                  />
-                </figure>
-              )}
+          <div className="view-content">
+            {loading && <p>Ładowanie…</p>}
+            {error && <p>Błąd: {error}</p>}
+            {!loading && !error && !item && <p>Brak treści do wyświetlenia.</p>}
 
-              {item.title && <h2 className="row-title">{item.title}</h2>}
-              {item.content && <div className="row-text preline">{item.content}</div>}
-            </article>
-          )}
-          
-          {!loading && rows.length > 0 && (
-            <div className="row-nav">
-              <button className="kiosk-btn kiosk-btn--outline" onClick={() => canPrev && setIdx(i => Math.max(0, i - 1))} disabled={!canPrev} >
-                Wstecz
-              </button>
+            {!loading && !error && item && (
+              <article className="row-article">
+                {item.image && imgOk && (
+                  <figure className="row-image">
+                    <img
+                      src={item.image}
+                      alt=""
+                      onError={() => setImgOk(false)}
+                      loading="eager"
+                      draggable={false}
+                    />
+                  </figure>
+                )}
 
-              <div className="row-counter">
-                {rows.length > 0 ? `${idx + 1} / ${rows.length}` : '0 / 0'}
+                {item.title && <h2 className="row-title">{item.title}</h2>}
+                {item.content && <div className="row-text preline">{item.content}</div>}
+              </article>
+            )}
+            
+            {!loading && rows.length > 0 && (
+              <div className="row-nav">
+                <button className="kiosk-btn kiosk-btn--outline" onClick={() => canPrev && setIdx(i => Math.max(0, i - 1))} disabled={!canPrev} >
+                  Wstecz
+                </button>
+
+                <div className="row-counter">
+                  {rows.length > 0 ? `${idx + 1} / ${rows.length}` : '0 / 0'}
+                </div>
+
+                <button className="kiosk-btn kiosk-btn--outline" onClick={() => canNext && setIdx(i => Math.min(rows.length - 1, i + 1))}
+                  disabled={!canNext} >
+                  Dalej
+                </button>
               </div>
+            )}
+          </div>
 
-              <button className="kiosk-btn kiosk-btn--outline" onClick={() => canNext && setIdx(i => Math.min(rows.length - 1, i + 1))}
-                disabled={!canNext} >
-                Dalej
-              </button>
-            </div>
-          )}
-        </div>
+        </section>
 
       </div>
+      
       <BottomBackBar secondsLeft={seconds} />
     </div>
   )

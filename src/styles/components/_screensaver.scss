@@ -1,4 +1,11 @@
 @layer components {
+  /* must be top-level inside the layer */
+  @keyframes screensaver-breathe {
+    0%, 50%, 100% { filter: none; opacity: 0; }
+    25% { filter: brightness(1.03) saturate(1.02); opacity: .20; } /* lighter */
+    75% { filter: brightness(0.97) saturate(0.98); opacity: .40; } /* darker */
+  }
+
   .screensaver {
     position: fixed;
     inset: 0;
@@ -9,6 +16,17 @@
     justify-content: center;
     padding: var(--space-6);
     transition: opacity .25s ease;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: white;
+      pointer-events: none;
+      z-index: 2;
+      animation: screensaver-breathe 6s ease-in-out infinite;
+      will-change: filter;
+    }
 
     &__center {
       display: flex;
@@ -27,22 +45,21 @@
         margin: 0 auto var(--space-10) auto;
         padding: 0;
 
-        img {
-          max-width: 100%;
-        }
+        img { max-width: 100%; }
       }
 
       &__time {
         margin: var(--space-6) auto var(--space-1) auto;
         font-size: 3rem;
         font-weight: 600;
-        letter-spacing: 3%;
+        /* tip: letter-spacing doesn't accept %, use em/px
+           letter-spacing: 0.03em; */
       }
 
       &__date {
         font-size: 2rem;
         font-weight: 500;
-        letter-spacing: 3%;
+        /* letter-spacing: 0.03em; */
         text-transform: capitalize;
         margin: var(--space-1) auto var(--space-10) auto;
       }
@@ -53,14 +70,8 @@
         gap: 12px;
         margin: var(--space-4) auto var(--space-10) auto;
 
-        &__icon {
-          width: 110px;
-          height: auto;
-        }
-
-        &__temp {
-          font-size: 2rem;
-        }
+        &__icon { width: 110px; height: auto; }
+        &__temp { font-size: 2rem; }
       }
 
       &__quote {
@@ -80,7 +91,6 @@
           line-height: 100%;
           margin-right: var(--space-2);
         }
-
         &::after {
           content: "”";
           font-size: 3rem;
@@ -94,11 +104,11 @@
     }
   }
 
-  .screensaver--day {
-    background: #e58f0e;
+  /* accessibility: also must be top-level */
+  @media (prefers-reduced-motion: reduce) {
+    .screensaver { animation: none; filter: none; }
   }
 
-  .screensaver--night {
-    background: #0e5161;
-  }
+  .screensaver--day   { background: #e58f0e; }
+  .screensaver--night { background: #0e5161; }
 }

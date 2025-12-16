@@ -9,7 +9,7 @@ export default function Ciekawostki() {
     <div className="kiosk-container">
       <TopBar />
 
-      <div className="main-menu">
+      <div className="section-menu">
         <MenuLink to="/ciekawostki-czy-wiesz" title="Czy wiesz że?" color="green" />
         <MenuLink to="/ciekawostki-cwiczenia" title="Ćwiczenia" color="green" />
         <MenuLink to="/ciekawostki-porady" title="Porady" color="green" />

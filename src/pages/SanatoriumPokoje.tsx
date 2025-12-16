@@ -1,66 +1,87 @@
-import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import TopBar from '../components/TopBar'
 import BottomBackBar from '../components/BottomBackBar'
 import ViewHeading from '../components/ViewHeading'
 import { useIdleSecondsLeft } from '../hooks/useIdleSecondsLeft'
-import { useRoomsFromSheetCsv } from '../hooks/useRoomsFromSheetCsv'
-import RoomCarousel from '../components/RoomCarousel'
+import { useRoomsFromSheet } from '../hooks/useRoomsFromSheet'
 
-const FILE_ID = '1TqSspYR7J_rKmIp5N14p7RgyPQYSpIqN5kFsl6PLflI'
+const FILE_ID = '1iIoeZYMJ6K0tGunOtGphW-Ud5K1S_d0VJO2ozB7YW7E'
 const GID = '154932015'
 
 export default function SanatoriumPokoje() {
   const seconds = useIdleSecondsLeft(60_000)
-  const { items, loading, error } = useRoomsFromSheetCsv(FILE_ID, GID)
+  const { items, loading, error } = useRoomsFromSheet(FILE_ID, GID)
 
-  const [idx, setIdx] = useState(0)
-  useEffect(() => { if (!loading) setIdx(0) }, [loading])
-  const room = items[idx]
-  const canPrev = idx > 0
-  const canNext = idx < items.length - 1
+  // Zbuduj mapę zakresów pokoi dla każdego piętra
+  const rangeByFloor = new Map<string, { min: number; max: number }>()
+  const floorSet = new Set<string>()
 
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowLeft' && canPrev) setIdx(i => i - 1)
-      if (e.key === 'ArrowRight' && canNext) setIdx(i => i + 1)
+  for (const r of items) {
+    const floor = String((r as any).floor ?? '').trim()
+    if (!floor) continue
+    floorSet.add(floor)
+
+    // wyciągnij numer pokoju jako liczbę (ignoruje ew. znaki nienumeryczne)
+    const rnMatch = String((r as any).roomNumber ?? '').match(/\d+/)
+    const rn = rnMatch ? parseInt(rnMatch[0], 10) : NaN
+    if (!Number.isFinite(rn)) continue
+
+    const prev = rangeByFloor.get(floor)
+    if (prev) {
+      if (rn < prev.min) prev.min = rn
+      if (rn > prev.max) prev.max = rn
+    } else {
+      rangeByFloor.set(floor, { min: rn, max: rn })
     }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [canPrev, canNext])
+  }
+
+  // unikalne piętra (posortowane numerycznie, a potem alfabetycznie)
+  const floors = Array.from(floorSet).sort((a, b) => {
+    const na = Number(a), nb = Number(b)
+    if (!Number.isNaN(na) && !Number.isNaN(nb)) return na - nb
+    return String(a).localeCompare(String(b), 'pl')
+  })
 
   return (
     <div className="kiosk-container view-sanatorium-pokoje">
       <TopBar />
-      <ViewHeading title="Pokoje" color="orange" />
+      <ViewHeading title="Pokoje — wybierz piętro" color="orange" />
 
-      <div className="room-viewer">
+      <section className="content-container">
         {loading && <p>Ładowanie…</p>}
         {error && <p>Błąd: {error}</p>}
-        {!loading && !error && items.length === 0 && <p>Brak danych o pokojach.</p>}
 
-        {!loading && !error && room && (
-          <article className="room-card">
-            {room.title && <h2 className="room-title">{room.title}</h2>}
-            {room.content && <div className="room-desc preline">{room.content}</div>}
-
-            {room.images.length > 0 && (
-              <RoomCarousel images={room.images} title={room.title} />
-            )}
-
-            <div className="room-nav">
-              <button className="kiosk-btn kiosk-btn--outline" onClick={() => canPrev && setIdx(i => i - 1)} disabled={!canPrev}>Wstecz</button>
-
-              <div className="room-counter">
-                {idx + 1} / {items.length}
-              </div>
-
-              <button className="kiosk-btn kiosk-btn--outline" onClick={() => canNext && setIdx(i => i + 1)} disabled={!canNext}>Dalej</button>
-            </div>
-          </article>
+        {!loading && !error && floors.length === 0 && (
+          <p>Brak zdefiniowanych pięter w danych.</p>
         )}
-      </div>
 
-      <BottomBackBar secondsLeft={seconds} />
+        {!loading && !error && floors.length > 0 && (
+          <div className="rooms-floor-grid">
+            <h3>Wybierz piętro:</h3>
+            {floors.map((floor) => {
+              const range = rangeByFloor.get(String(floor))
+              const rangeText = range
+                ? `${range.min}–${range.max}`
+                : `${floor}00 – ${floor}XX`
+
+              return (
+                <Link
+                  key={floor as React.Key}
+                  className="kiosk-btn kiosk-btn--outline"
+                  to={`/sanatorium-pokoje/${encodeURIComponent(String(floor))}`}
+                >
+                  Piętro {String(floor)} – pokoje {rangeText}
+                </Link>
+              )
+            })}
+          </div>
+        )}
+      </section>
+
+      <BottomBackBar
+        secondsLeft={seconds}
+        backTo={`/sanatorium`}
+      />
     </div>
   )
 }

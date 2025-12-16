@@ -9,7 +9,7 @@ export default function Krynica() {
     <div className="kiosk-container">
       <TopBar />
 
-      <div className="main-menu">
+      <div className="section-menu">
         <MenuLink to="/krynica-wydarzenia" title="Najbliższe wydarzenia" color="blue" />
         <MenuLink to="/krynica-atrakcje-lato" title="Atrakcje latem" color="blue" />
         <MenuLink to="/krynica-atrakcje-zima" title="Atrakcje zimą" color="blue" />

@@ -15,12 +15,12 @@ export default function SanatoriumOpinie() {
     <div className="kiosk-container view-sanatorium-opinie">
       <TopBar />
       <ViewHeading title="Opinie" color="orange" />
-      
-      <GoogleFormEmbed
-        src={FORM_URL}
-        title="Opinie Sanatorium"
-      />
-
+      <section className="content-container-pdf-short">
+        <GoogleFormEmbed
+          src={FORM_URL}
+          title="Opinie Sanatorium"
+        />
+      </section>
       <BottomBackBar secondsLeft={seconds} />
     </div>
   )

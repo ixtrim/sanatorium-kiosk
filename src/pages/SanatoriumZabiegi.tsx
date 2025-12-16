@@ -65,40 +65,44 @@ export default function SanatoriumZabiegi() {
       <TopBar />
       <ViewHeading title="Zabiegi" color="orange" />
 
-      <div className="zabiegi-viewer">
-        {error && <p>Błąd: {error}</p>}
-        {!error && items.length === 0 && <p>Brak obrazów w katalogu „zabiegi”.</p>}
+      <section className="content-container">
 
-        {!error && item && (
-          <>
-            <h2 className="zabieg__title">{item.name}</h2>
+        <div className="zabiegi-viewer">
+          {error && <p>Błąd: {error}</p>}
+          {!error && items.length === 0 && <p>Brak obrazów w katalogu „zabiegi”.</p>}
 
-            <figure className="zabieg__figure">
-              {imgOk ? (
-                <img
-                  src={item.url}
-                  alt={item.name}
-                  loading="eager"
-                  draggable={false}
-                  onError={() => setImgOk(false)}
-                />
-              ) : (
-                <div className="zabieg__img-error">Nie udało się załadować obrazu.</div>
-              )}
-            </figure>
+          {!error && item && (
+            <>
+              <h2 className="zabieg__title">{item.name}</h2>
 
-            <div className="zabiegi-nav">
-              <button className="kiosk-btn kiosk-btn--outline" onClick={() => canPrev && setIdx(i => i - 1)} disabled={!canPrev} >Wstecz</button>
+              <figure className="zabieg__figure">
+                {imgOk ? (
+                  <img
+                    src={item.url}
+                    alt={item.name}
+                    loading="eager"
+                    draggable={false}
+                    onError={() => setImgOk(false)}
+                  />
+                ) : (
+                  <div className="zabieg__img-error">Nie udało się załadować obrazu.</div>
+                )}
+              </figure>
 
-              <div className="zabiegi-counter">
-                {idx + 1} / {items.length}
+              <div className="zabiegi-nav">
+                <button className="kiosk-btn kiosk-btn--outline" onClick={() => canPrev && setIdx(i => i - 1)} disabled={!canPrev} >Wstecz</button>
+
+                <div className="zabiegi-counter">
+                  {idx + 1} / {items.length}
+                </div>
+
+                <button className="kiosk-btn kiosk-btn--outline" onClick={() => canNext && setIdx(i => i + 1)} disabled={!canNext} >Dalej</button>
               </div>
+            </>
+          )}
+        </div>
 
-              <button className="kiosk-btn kiosk-btn--outline" onClick={() => canNext && setIdx(i => i + 1)} disabled={!canNext} >Dalej</button>
-            </div>
-          </>
-        )}
-      </div>
+      </section>
 
       <BottomBackBar secondsLeft={seconds} />
     </div>

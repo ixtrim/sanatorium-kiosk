@@ -10,7 +10,7 @@ export default function Home() {
         <MainLink
           to="/ciekawostki"
           title="Ciekawostki dnia"
-          subtitle="Informacje o pokojach, zabiegach, wyżywieniu"
+          subtitle="Praktyczne informacje oraz humor i gry dla gości"
           color="green"
           icon={<img src="/media/icons/icon_white_book.svg" alt="Ciekawostki dnia" />}
         />

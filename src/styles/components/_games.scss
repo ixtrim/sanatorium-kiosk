@@ -1,0 +1,18 @@
+@layer components {
+  .inline-game {
+    width: 100%;
+    background: transparent;
+    overflow: hidden;
+    margin-top: -2rem;
+
+    &__bar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: .5rem .75rem; background: rgba(255,255,255,.06);
+    }
+    &__title { margin: 0; font-size: 1rem; font-weight: 800; color: #fff; display: none; }
+    &__close {
+      display: none;
+    }
+    &__frame { display: block; border: 0; }
+  }
+}

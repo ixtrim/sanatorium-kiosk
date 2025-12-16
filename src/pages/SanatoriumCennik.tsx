@@ -1,101 +1,45 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import TopBar from '../components/TopBar'
 import BottomBackBar from '../components/BottomBackBar'
 import ViewHeading from '../components/ViewHeading'
 import { useIdleSecondsLeft } from '../hooks/useIdleSecondsLeft'
-import PdfCanvasViewer from '../components/PdfCanvasViewer'
+
+type Item = { title: string; file: string }
 
 export default function SanatoriumCennik() {
   const seconds = useIdleSecondsLeft(60_000)
-  
-  const url = `${import.meta.env.BASE_URL}media/cennik-zabiegow.pdf`
-  const title = 'Cennik'
-
-  const listRef = useRef<HTMLDivElement>(null)
-
-  const [canUp, setCanUp] = useState(false)
-  const [canDown, setCanDown] = useState(false)
-
-  const IconUpUrl   = `${import.meta.env.BASE_URL}media/icons/icon_black_up.svg`
-  const IconDownUrl = `${import.meta.env.BASE_URL}media/icons/icon_black_arrow-down.svg`
-
-  const updateScrollState = () => {
-    const el = listRef.current
-    if (!el) return
-    const max = el.scrollHeight - el.clientHeight
-    const eps = 1
-    setCanUp(el.scrollTop > eps)
-    setCanDown(el.scrollTop < max - eps)
-  }
-
-  const scrollBy = (dir: 'up' | 'down') => {
-    const el = listRef.current
-    if (!el) return
-    const step = Math.round(el.clientHeight * 0.9)
-    el.scrollBy({ top: dir === 'up' ? -step : step, behavior: 'smooth' })
-    requestAnimationFrame(() => setTimeout(updateScrollState, 250))
-  }
+  const [items, setItems] = useState<Item[]>([])
 
   useEffect(() => {
-    const el = listRef.current
-    if (!el) return
-    
-    updateScrollState()
-
-    const onScroll = () => updateScrollState()
-    el.addEventListener('scroll', onScroll, { passive: true })
-    
-    const onWheel = (e: WheelEvent) => {
-      const canScrollUp = e.deltaY < 0 && canUp
-      const canScrollDown = e.deltaY > 0 && canDown
-      if (canScrollUp || canScrollDown) {
-        e.preventDefault()
-        el.scrollBy({ top: e.deltaY, behavior: 'auto' })
-      }
-    }
-    el.addEventListener('wheel', onWheel, { passive: false })
-    
-    const ro = new ResizeObserver(updateScrollState)
-    ro.observe(el)
-    
-    const mo = new MutationObserver(updateScrollState)
-    mo.observe(el, { childList: true, subtree: true })
-
-    return () => {
-      el.removeEventListener('scroll', onScroll)
-      el.removeEventListener('wheel', onWheel)
-      ro.disconnect()
-      mo.disconnect()
-    }
-  }, [canUp, canDown])
+    fetch('/media/cenniki/index.json', { cache: 'no-store' })
+      .then(r => r.json())
+      .then((data: Item[]) => setItems(data))
+      .catch(() => setItems([]))
+  }, [])
 
   return (
-    <div className="kiosk-container pdf-layout">
+    <div className="kiosk-container">
       <TopBar />
-      <ViewHeading title={title} color="orange" />
-
-      <div className="pdf-zone">
-        <button
-          className={`pdf-scroll-btn pdf-scroll-btn--top ${!canUp ? 'is-disabled' : ''}`}
-          onClick={() => scrollBy('up')}
-        >
-          <img src={IconUpUrl} alt="" width={45} height={45} className="bottom-back-bar__icon-img" draggable={false} />
-          <span>PRZEWIŃ W GÓRĘ</span>
-        </button>
-
-        <div className="pdf-scrollable" ref={listRef}>
-          <PdfCanvasViewer fileUrl={url} containerRef={listRef} />
-        </div>
-
-        <button
-          className={`pdf-scroll-btn pdf-scroll-btn--bottom ${!canDown ? 'is-disabled' : ''}`}
-          onClick={() => scrollBy('down')}
-        >
-          <img src={IconDownUrl} alt="" width={45} height={45} className="bottom-back-bar__icon-img" draggable={false} />
-          <span>PRZEWIŃ W DÓŁ</span>
-        </button>
+      <div className="view-regulaminy">
+        <ViewHeading title="Cenniki" color="orange" />
+        <section className="content-container">
+          <div className="view-regulaminy__list">
+            {items.map((it, i) => (
+              <Link
+                key={i}
+                to={`/sanatorium-cenniki-pdfreader?url=${encodeURIComponent(it.file)}&title=${encodeURIComponent(it.title)}`}
+                className="reg-item"
+              >
+                <span className="reg-item__title">{it.title}</span>
+              </Link>
+            ))}
+            {items.length === 0 && (
+              <div className="reg-empty">Brak pozycji w /media/regulaminy/index.json</div>
+            )}
+          </div>
+        </section>
       </div>
-
       <BottomBackBar secondsLeft={seconds} />
     </div>
   )

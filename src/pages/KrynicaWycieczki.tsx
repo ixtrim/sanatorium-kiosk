@@ -5,7 +5,7 @@ import ViewHeading from '../components/ViewHeading'
 import { useIdleSecondsLeft } from '../hooks/useIdleSecondsLeft'
 import { useGSheetRowsCsv } from '../hooks/useGSheetRowsCsv'
 
-const FILE_ID = '1TqSspYR7J_rKmIp5N14p7RgyPQYSpIqN5kFsl6PLflI'
+const FILE_ID = '1iIoeZYMJ6K0tGunOtGphW-Ud5K1S_d0VJO2ozB7YW7E'
 const GID = '1503586122'
 
 export default function KrynicaWycieczki() {

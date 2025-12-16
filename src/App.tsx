@@ -7,11 +7,14 @@ import CiekawostkiPorady from './pages/CiekawostkiPorady'
 import CiekawostkiHistoria from './pages/CiekawostkiHistoria'
 import CiekawostkiHumor from './pages/CiekawostkiHumor'
 import CiekawostkiGry from './pages/CiekawostkiGry'
+import CiekawostkiGryPlay from './pages/CiekawostkiGryPlay'
 import CiekawostkiSavoirVivre from './pages/CiekawostkiSavoirVivre'
 import CiekawostkiKalendarium from './pages/CiekawostkiKalendarium'
 import Sanatorium from './pages/Sanatorium'
 import SanatoriumCennik from './pages/SanatoriumCennik'
 import SanatoriumPokoje from './pages/SanatoriumPokoje'
+import SanatoriumPokojePietro from './pages/SanatoriumPokojePietro'
+import SanatoriumPokojePietroPokoj from './pages/SanatoriumPokojePietroPokoj'
 import SanatoriumKuracjusze from './pages/SanatoriumKuracjusze'
 import SanatoriumPersonel from './pages/SanatoriumPersonel'
 import SanatoriumOpinie from './pages/SanatoriumOpinie'
@@ -19,6 +22,7 @@ import SanatoriumRegulaminy from './pages/SanatoriumRegulaminy'
 import SanatoriumWyzywienie from './pages/SanatoriumWyzywienie'
 import SanatoriumZabiegi from './pages/SanatoriumZabiegi'
 import RegulaminView from './pages/RegulaminView'
+import CennikView from './pages/CennikView'
 import Krynica from './pages/Krynica'
 import KrynicaAtrakcje from './pages/KrynicaAtrakcje'
 import KrynicaAtrakcjeLatem from './pages/KrynicaAtrakcjeLatem'
@@ -55,11 +59,15 @@ export default function App() {
           <Route path="/ciekawostki-historia" element={<CiekawostkiHistoria/>}/>
           <Route path="/ciekawostki-humor" element={<CiekawostkiHumor/>}/>
           <Route path="/ciekawostki-gry" element={<CiekawostkiGry/>}/>
+          <Route path="/ciekawostki-gry/graj" element={<CiekawostkiGryPlay />} />
           <Route path="/ciekawostki-savoir-vivre" element={<CiekawostkiSavoirVivre/>}/>
           <Route path="/ciekawostki-kalendarium" element={<CiekawostkiKalendarium/>}/>
           <Route path="/sanatorium" element={<Sanatorium/>}/>
           <Route path="/sanatorium-cennik" element={<SanatoriumCennik/>}/>
-          <Route path="/sanatorium-pokoje" element={<SanatoriumPokoje/>}/>
+          <Route path="/sanatorium-cenniki-pdfreader"  element={<CennikView/>}/>
+          <Route path="/sanatorium-pokoje" element={<SanatoriumPokoje />} />
+          <Route path="/sanatorium-pokoje/:floor" element={<SanatoriumPokojePietro />} />
+          <Route path="/sanatorium-pokoje/:floor/:room" element={<SanatoriumPokojePietroPokoj />} />
           <Route path="/sanatorium-kuracjusze" element={<SanatoriumKuracjusze/>}/>
           <Route path="/sanatorium-personel" element={<SanatoriumPersonel/>}/>
           <Route path="/sanatorium-opinie" element={<SanatoriumOpinie/>}/>

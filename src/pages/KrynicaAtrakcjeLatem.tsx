@@ -74,6 +74,8 @@ export default function KrynicaAtrakcjeLatem() {
       <TopBar />
       <ViewHeading title={title} color="blue" />
 
+      <section className="content-container-pdf-short">
+
       <div className="pdf-zone">
         <button
           className={`pdf-scroll-btn pdf-scroll-btn--top ${!canUp ? 'is-disabled' : ''}`}
@@ -95,6 +97,8 @@ export default function KrynicaAtrakcjeLatem() {
           <span>PRZEWIŃ W DÓŁ</span>
         </button>
       </div>
+
+      </section>
 
       <BottomBackBar secondsLeft={seconds} />
     </div>

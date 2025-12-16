@@ -1,10 +1,12 @@
 @layer views {
   .view-sanatorium-pokoje {
     .room-viewer {
+      width: 100%;
       max-width: 1100px;
       margin: 0 auto;
 
       .room-card {
+        width: 100%;
         display: grid;
         gap: 1rem;
       }
@@ -42,9 +44,7 @@
 
       .room-carousel {
         position: relative;
-        border-radius: 24px;
         overflow: hidden;
-        background: var(--text);
 
         &__viewport {
           overflow: hidden;
@@ -61,20 +61,20 @@
         &__slide {
           min-width: 100%;
           height: 100%;
-          display: grid;
-          gap: 0;
-          place-items: center;
           position: relative;
           padding: 0;
           margin: 0;
+          background: var(--surface) url('/media/icons/preloader.gif') center center no-repeat;
 
           img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
             display: block;
-            margin: 0;
+            margin: auto;
             padding: 0;
+            border-radius: 12px;
           }
         }
 
@@ -83,14 +83,14 @@
           top: 50%;
           transform: translateY(-50%);
           border: 0;
-          background: rgba(255, 255, 255, .9);
+          background: var(--brand-orange);
+          color: var(--surface);
           width: 48px;
           height: 48px;
           border-radius: 999px;
           display: grid;
           place-items: center;
           cursor: pointer;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, .2);
           z-index: 9;
 
           &[disabled] {

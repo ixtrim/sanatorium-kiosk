@@ -43,7 +43,7 @@ export default function ScreenSaver({ visible }: { visible: boolean }) {
     cacheKey: `greetings:${gid}`,
   })
 
-  const logoUrl    = `${import.meta.env.BASE_URL}media/brand/logo-white.png`
+  const logoUrl    = `${import.meta.env.BASE_URL}media/brand/logo-white.svg`
   const weatherUrl = `${import.meta.env.BASE_URL}media/icons/icon_white_cloud.svg`
 
   const fallbackDay   = 'ZDROWIE ZACZYNA SIĘ OD CHWILI SPOKOJU.'

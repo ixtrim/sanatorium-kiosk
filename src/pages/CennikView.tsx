@@ -43,13 +43,11 @@ export default function RegulaminView() {
     const el = listRef.current
     if (!el) return
 
-    // initial
     updateScrollState()
 
     const onScroll = () => updateScrollState()
     el.addEventListener('scroll', onScroll, { passive: true })
 
-    // lock wheel to the container (optional)
     const onWheel = (e: WheelEvent) => {
       const canScrollUp = e.deltaY < 0 && canUp
       const canScrollDown = e.deltaY > 0 && canDown
@@ -60,11 +58,9 @@ export default function RegulaminView() {
     }
     el.addEventListener('wheel', onWheel, { passive: false })
 
-    // react to container size changes (e.g., orientation)
     const ro = new ResizeObserver(updateScrollState)
     ro.observe(el)
 
-    // react to content being appended (PdfCanvasViewer renders pages async)
     const mo = new MutationObserver(updateScrollState)
     mo.observe(el, { childList: true, subtree: true })
 
@@ -80,27 +76,27 @@ export default function RegulaminView() {
     <div className="kiosk-container pdf-layout">
       <TopBar />
       <ViewHeading title={title} color="orange" />
-<section className="content-container-pdf-short">
-      <div className="pdf-zone">
-        <button className={`pdf-scroll-btn pdf-scroll-btn--top ${!canUp ? 'is-disabled' : ''}`} onClick={() => scrollBy('up')}>
-          <img src={IconUpUrl} alt="" width={45} height={45} className="bottom-back-bar__icon-img" draggable={false} />
-          <span>PRZEWIŃ W GÓRĘ</span>
-        </button>
+      <section className="content-container-pdf-short">
+        <div className="pdf-zone">
+          <button className={`pdf-scroll-btn pdf-scroll-btn--top ${!canUp ? 'is-disabled' : ''}`} onClick={() => scrollBy('up')}>
+            <img src={IconUpUrl} alt="" width={45} height={45} className="bottom-back-bar__icon-img" draggable={false} />
+            <span>PRZEWIŃ W GÓRĘ</span>
+          </button>
 
-        <div className="pdf-scrollable">
-          {!url ? (
-            <div className="pdf-empty">Brak adresu pliku PDF.</div>
-          ) : (
-            <PdfCanvasViewer fileUrl={url} containerRef={listRef} />
-          )}
+          <div className="pdf-scrollable">
+            {!url ? (
+              <div className="pdf-empty">Brak adresu pliku PDF.</div>
+            ) : (
+              <PdfCanvasViewer fileUrl={url} containerRef={listRef} />
+            )}
+          </div>
+
+          <button className={`pdf-scroll-btn pdf-scroll-btn--bottom ${!canDown ? 'is-disabled' : ''}`} onClick={() => scrollBy('down')}>
+            <img src={IconDownUrl} alt="" width={45} height={45} className="bottom-back-bar__icon-img" draggable={false} />
+            <span>PRZEWIŃ W DÓŁ</span>
+          </button>
         </div>
-
-        <button className={`pdf-scroll-btn pdf-scroll-btn--bottom ${!canDown ? 'is-disabled' : ''}`} onClick={() => scrollBy('down')}>
-          <img src={IconDownUrl} alt="" width={45} height={45} className="bottom-back-bar__icon-img" draggable={false} />
-          <span>PRZEWIŃ W DÓŁ</span>
-        </button>
-      </div>
-</section>
+      </section>
       <BottomBackBar secondsLeft={seconds} />
     </div>
   )
