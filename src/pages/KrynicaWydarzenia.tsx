@@ -10,14 +10,10 @@ const FILE_ID = '1TqSspYR7J_rKmIp5N14p7RgyPQYSpIqN5kFsl6PLflI'
 const GID = '0'
 
 type EventRow = {
+  date?: string
+  dateLabel?: string
   title?: string
   summary?: string
-  dateLabel?: string
-  date?: string // czasem bywa ISO
-  dateISO?: string
-  start?: string
-  startDate?: string
-  imageUrl?: string
   [key: string]: any
 }
 
@@ -27,120 +23,71 @@ function todayStartLocalMs() {
   return d.getTime()
 }
 
+function isHeaderRow(ev: any): boolean {
+  const s = String(ev?.date ?? ev?.Date ?? ev?.A ?? '').trim().toLowerCase()
+  return s === 'date'
+}
+
 function getEventDayStartMs(ev: any): number | null {
-  if (!ev) return null
-
-  // preferuj typowe pola (u Ciebie kol. A wygląda na ISO: 2025-12-17)
-  const candidates = [
-    ev.dateISO,
-    ev.startDate,
-    ev.start,
-    ev.date,
-    ev.Date,
-    ev['A'],
-    ev['Column A'],
-  ].filter(Boolean)
-
-  let raw: any = candidates[0]
-
-  if (!raw && typeof ev === 'object') {
-    const found = Object.values(ev).find((v) => typeof v === 'string' && /\d{4}-\d{2}-\d{2}/.test(v))
-    raw = found
-  }
+  const raw = ev?.date ?? ev?.dateISO ?? ev?.startDate ?? ev?.start
   if (!raw) return null
 
   const s = String(raw).trim()
-
-  // ISO: 2025-12-17 lub 2025-12-17T...
-  if (/^\d{4}-\d{2}-\d{2}/.test(s)) {
-    const d = new Date(s)
-    if (!Number.isNaN(d.getTime())) {
-      return new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime()
-    }
-  }
-
-  // MM/DD/YY... (gdyby kiedykolwiek było)
-  const mdy = s.match(/^\s*(\d{1,2})\/(\d{1,2})\/(\d{2,4})/)
-  if (mdy) {
-    const mm = Number(mdy[1])
-    const dd = Number(mdy[2])
-    let yy = Number(mdy[3])
-    if (mdy[3].length === 2) yy = 2000 + yy
-    const d = new Date(yy, mm - 1, dd)
-    d.setHours(0, 0, 0, 0)
-    return d.getTime()
-  }
-
   const d = new Date(s)
-  if (!Number.isNaN(d.getTime())) {
-    return new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime()
-  }
+  if (Number.isNaN(d.getTime())) return null
 
-  return null
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime()
 }
 
-function getEventImageUrl(ev: any): string | null {
-  if (!ev) return null
+/**
+ * Wyciąga pierwszy URL z tekstu (kolumna C / summary),
+ * usuwa go z tekstu (żeby nie wyświetlać w opisie).
+ */
+function extractUrlFromText(text: string): { cleanedText: string; url: string | null } {
+  const raw = String(text ?? '')
 
-  // kolumna G (URL)
-  const direct = [
-    ev.imageUrl,
-    ev.image,
-    ev.img,
-    ev.photo,
-    ev.cover,
-    ev.G,
-    ev['Column G'],
-    ev['column G'],
-    ev['column_g'],
-  ].find((v) => typeof v === 'string' && v.trim().length > 0)
-
-  if (typeof direct === 'string') {
-    const url = direct.trim()
-    if (/^https?:\/\//i.test(url) || /^\/\//.test(url)) return url
+  // znajdź pierwszy URL
+  const match = raw.match(/https?:\/\/[^\s<>"')\]]+/i)
+  if (!match) {
+    return { cleanedText: raw.trim(), url: null }
   }
 
-  // fallback: pierwszy string będący URL
-  if (typeof ev === 'object') {
-    const found = Object.values(ev).find(
-      (v) => typeof v === 'string' && /^https?:\/\//i.test(v.trim())
-    )
-    if (typeof found === 'string') return found.trim()
-  }
+  // usuń ewentualną kropkę/przecinek na końcu
+  let url = match[0].trim().replace(/[.,;]+$/, '')
 
-  return null
+  // usuń URL z tekstu (pierwsze wystąpienie)
+  let cleaned = raw.replace(match[0], '').trim()
+
+  // posprzątaj puste linie (po wycięciu URL)
+  cleaned = cleaned.replace(/\n{3,}/g, '\n\n').trim()
+
+  return { cleanedText: cleaned, url }
 }
 
 export default function KrynicaWydarzenia() {
   const seconds = useIdleSecondsLeft(60_000)
   const { events, loading, error } = useUpcomingEventsCsv(FILE_ID, GID)
 
-  // ✅ filtr + sort: tylko od dzisiaj w przód, posortowane od najbliższego
+  // ✅ tylko od dzisiaj w przód + sort od najbliższego
   const rows = useMemo(() => {
-    const list = (events || []) as EventRow[]
+    const list = (events || []) as any[]
     const todayMs = todayStartLocalMs()
 
-    const withDate = list
-      .map((ev) => {
-        const dayMs = getEventDayStartMs(ev)
-        return { ev, dayMs }
-      })
+    return list
+      .filter((ev) => !isHeaderRow(ev))
+      .map((ev) => ({ ev: ev as EventRow, dayMs: getEventDayStartMs(ev) }))
       .filter(({ dayMs }) => dayMs == null || dayMs >= todayMs)
       .sort((a, b) => {
-        // null na koniec (gdyby coś nie miało daty)
         if (a.dayMs == null && b.dayMs == null) return 0
         if (a.dayMs == null) return 1
         if (b.dayMs == null) return -1
         return a.dayMs - b.dayMs
       })
       .map(({ ev }) => ev)
-
-    return withDate
   }, [events])
 
   // pagination
   const [idx, setIdx] = useState(0)
-
   useEffect(() => {
     setIdx(0)
   }, [rows.length])
@@ -149,9 +96,16 @@ export default function KrynicaWydarzenia() {
   const canNext = rows.length > 0 && idx < rows.length - 1
   const current = rows.length > 0 ? rows[idx] : null
 
-  const imageSrc = current ? getEventImageUrl(current) : null
+  // ✅ obrazek bierzemy z URL-a w kolumnie C (summary)
+  const { cleanedText: summaryCleaned, url: imageFromSummary } = useMemo(() => {
+    const s = current?.summary ?? ''
+    return extractUrlFromText(s)
+  }, [current?.summary])
+
   const [imgOk, setImgOk] = useState(true)
-  useEffect(() => setImgOk(true), [imageSrc])
+  useEffect(() => {
+    setImgOk(true)
+  }, [idx, imageFromSummary])
 
   return (
     <div className="kiosk-container view-krynica-wydarzenia">
@@ -169,42 +123,40 @@ export default function KrynicaWydarzenia() {
 
           {!loading && !error && rows.length > 0 && current && (
             <>
-              {/* ✅ obrazek z kolumny G nad treścią */}
-              {imageSrc && imgOk && (
-                <div className="event-image-wrap">
-                  <img
-                    src={imageSrc}
-                    alt={current.title ? String(current.title) : 'Wydarzenie'}
-                    className="event-image"
-                    onError={() => setImgOk(false)}
-                    loading="eager"
-                  />
-                </div>
-              )}
-
               <ul className="view-content-events-list">
                 <li key={idx} className="event-item">
-                  <div className="event-date">
-                    {current.dateLabel ?? current.date ?? ''}
-                  </div>
+                  <div className="event-date">{current.dateLabel ?? current.date ?? ''}</div>
 
                   {current.title && <h3 className="event-title">{current.title}</h3>}
 
-                  {current.summary && (
-                    <p className="event-description preline">
+                  {imageFromSummary && imgOk && (
+                    <figure className="row-image event-image-wrap">
+                      <img
+                        src={imageFromSummary}
+                        alt={current.title ? String(current.title) : 'Wydarzenie'}
+                        onError={() => setImgOk(false)}
+                        loading="eager"
+                        draggable={false}
+                        referrerPolicy="no-referrer"
+                      />
+                    </figure>
+                  )}
+
+                  {summaryCleaned && (
+                    <div className="event-description preline">
                       <TypewriterText
-                        text={current.summary ?? ''}
+                        text={summaryCleaned}
                         className="view-content-text preline"
                         speedMs={18}
                         startDelayMs={80}
                       />
-                    </p>
+                    </div>
                   )}
                 </li>
               </ul>
 
               <div className="row-nav">
-                {/* ✅ pojawia się dopiero po przejściu do kolejnego */}
+                {/* prev pojawia się dopiero gdy użytkownik przeszedł dalej */}
                 {idx > 0 ? (
                   <button
                     className="kiosk-btn kiosk-btn--outline"
