@@ -1,14 +1,18 @@
 import React from 'react'
 import ScreenSaver from '../components/ScreenSaver'
+import InteractionBlocker from '../components/InteractionBlocker'
+
 
 type Props = {
   children: React.ReactNode
   afterMs?: number
 }
+
 export const ScreenSaverContext = React.createContext<{ active: boolean }>({ active: false })
 
 export default function ScreenSaverProvider({ children, afterMs = 90_000 }: Props) {
   const [active, setActive] = React.useState(false)
+  const [blockInteraction, setBlockInteraction] = React.useState(false)
 
   React.useEffect(() => {
     let last = Date.now()
@@ -29,10 +33,20 @@ export default function ScreenSaverProvider({ children, afterMs = 90_000 }: Prop
     }
   }, [active, afterMs])
 
+  // Block interaction for 1s after screensaver closes
+  React.useEffect(() => {
+    if (!active) {
+      setBlockInteraction(true)
+      const t = setTimeout(() => setBlockInteraction(false), 1000)
+      return () => clearTimeout(t)
+    }
+  }, [active])
+
   return (
     <ScreenSaverContext.Provider value={{ active }}>
       {children}
       <ScreenSaver visible={active} />
+      <InteractionBlocker active={blockInteraction} durationMs={1000} />
     </ScreenSaverContext.Provider>
   )
 }
