@@ -15,7 +15,7 @@ import SanatoriumCennik from './pages/SanatoriumCennik'
 import SanatoriumPokoje from './pages/SanatoriumPokoje'
 import SanatoriumPokojePietro from './pages/SanatoriumPokojePietro'
 import SanatoriumPokojePietroPokoj from './pages/SanatoriumPokojePietroPokoj'
-import SanatoriumKuracjusze from './pages/SanatoriumKuracjusze'
+import SanatoriumPromocje from './pages/SanatoriumPromocje'
 import SanatoriumZKalendarium from './pages/SanatoriumZKalendarium'
 import SanatoriumZKalendariumGaleria from './pages/SanatoriumZKalendariumGaleria'
 import SanatoriumOpinie from './pages/SanatoriumOpinie'
@@ -69,7 +69,7 @@ export default function App() {
           <Route path="/sanatorium-pokoje" element={<SanatoriumPokoje />} />
           <Route path="/sanatorium-pokoje/:floor" element={<SanatoriumPokojePietro />} />
           <Route path="/sanatorium-pokoje/:floor/:room" element={<SanatoriumPokojePietroPokoj />} />
-          <Route path="/sanatorium-kuracjusze" element={<SanatoriumKuracjusze/>}/>
+          <Route path="/sanatorium-promocje" element={<SanatoriumPromocje/>}/>
           <Route path="/sanatorium-kalendarium" element={<SanatoriumZKalendarium/>}/>
           <Route path="/sanatorium-kalendarium/:idx" element={<SanatoriumZKalendariumGaleria/>}/>
           <Route path="/sanatorium-opinie" element={<SanatoriumOpinie/>}/>

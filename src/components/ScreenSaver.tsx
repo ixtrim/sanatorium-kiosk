@@ -27,10 +27,15 @@ function getModeByTime(d: Date) {
 }
 
 export default function ScreenSaver({ visible }: { visible: boolean }) {
-  if (!visible) return null
-
   const { now, time, date } = usePolandClock(30_000)
-  const mode = useMemo(() => getModeByTime(now), [now])
+  const hour = now.getHours()
+  // Show screensaver if visible and (6:00-9:00 or 22:00-6:00)
+  const isDay = hour >= 6 && hour < 9
+  const isNight = hour >= 22 || hour < 6
+  const shouldShow = visible && (isDay || isNight)
+  if (!shouldShow) return null
+
+  const mode = isDay ? 'day' : 'night'
   const { tempC } = useKrynicaWeather(10 * 60 * 1000)
 
   const SHEET_ID  = '1TqSspYR7J_rKmIp5N14p7RgyPQYSpIqN5kFsl6PLflI'

@@ -44,7 +44,7 @@ function writeWindow(s: WinState) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(s))
 }
 
-export default function SanatoriumKuracjusze() {
+export default function SanatoriumPromocje() {
   const seconds = useIdleSecondsLeft(60_000)
 
   const { loading, error, first, pickRandom } =
@@ -87,9 +87,9 @@ export default function SanatoriumKuracjusze() {
   }
 
   return (
-    <div className="kiosk-container view-sanatorium-kuracjusze">
+    <div className="kiosk-container view-sanatorium-promocje">
       <TopBar />
-      <ViewHeading title="Kuracjusze" color="orange" />
+      <ViewHeading title="Promocje" color="orange" />
 
       <div className="view-content">
         {loading && <p>Ładowanie…</p>}
