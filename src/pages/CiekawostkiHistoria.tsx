@@ -10,7 +10,7 @@ const FILE_ID = '1iIoeZYMJ6K0tGunOtGphW-Ud5K1S_d0VJO2ozB7YW7E'
 const GID = '922194573'
 
 // Limit: max 3 kliknięcia „Dalej” w oknie 5 minut
-const LIMIT = 3
+const LIMIT = 99
 const WINDOW_MS = 5 * 60 * 1000
 const STORAGE_KEY = 'historia:window_v2'
 

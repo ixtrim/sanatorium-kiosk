@@ -27,14 +27,11 @@ function getModeByTime(d: Date) {
 }
 
 export default function ScreenSaver({ visible }: { visible: boolean }) {
+  // Always call hooks in the same order
   const { now, time, date } = usePolandClock(30_000)
   const hour = now.getHours()
-  // Show screensaver if visible and (6:00-9:00 or 22:00-6:00)
   const isDay = hour >= 6 && hour < 9
   const isNight = hour >= 22 || hour < 6
-  const shouldShow = visible && (isDay || isNight)
-  if (!shouldShow) return null
-
   const mode = isDay ? 'day' : 'night'
   const { tempC } = useKrynicaWeather(10 * 60 * 1000)
 
@@ -54,6 +51,10 @@ export default function ScreenSaver({ visible }: { visible: boolean }) {
   const fallbackDay   = 'ZDROWIE ZACZYNA SIĘ OD CHWILI SPOKOJU.'
   const fallbackNight = 'SANATORIUM – MIEJSCE, GDZIE REGENERUJE SIĘ CIAŁO I DUSZA.'
   const quote = greeting || (mode === 'day' ? fallbackDay : fallbackNight)
+
+  // Only render screensaver content if visible and in the correct time window
+  const shouldShow = visible && (isDay || isNight)
+  if (!shouldShow) return null
 
   return (
     <div className={`screensaver screensaver--${mode}`} role="dialog" aria-label="Wygaszacz ekranu">

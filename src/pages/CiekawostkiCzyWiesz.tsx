@@ -9,7 +9,7 @@ import TypewriterText from '../components/TypewriterText'
 const FILE_ID = '1TqSspYR7J_rKmIp5N14p7RgyPQYSpIqN5kFsl6PLflI'
 const GID = '1240753996'
 
-const LIMIT = 3
+const LIMIT = 99
 const WINDOW_MS = 5 * 60 * 1000 // 5 minut
 
 type WinState = { start: number; count: number }

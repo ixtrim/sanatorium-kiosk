@@ -10,7 +10,7 @@ const FILE_ID = '1TqSspYR7J_rKmIp5N14p7RgyPQYSpIqN5kFsl6PLflI'
 const GID = '1032664144'
 
 // Flow: dziś (0) -> wczoraj (1) -> 2 dni temu (2) -> blokada (3) na 5 minut
-const LIMIT = 3
+const LIMIT = 99
 const WINDOW_MS = 5 * 60 * 1000
 const STORAGE_KEY = 'savoirvivre:window_v2'
 

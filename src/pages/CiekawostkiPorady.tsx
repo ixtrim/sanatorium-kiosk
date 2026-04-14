@@ -10,7 +10,7 @@ const FILE_ID = '1TqSspYR7J_rKmIp5N14p7RgyPQYSpIqN5kFsl6PLflI'
 const GID = '1455303464'
 
 // Limit: max 3 kliknięcia „Dalej” w oknie 5 minut
-const LIMIT = 3
+const LIMIT = 99
 const WINDOW_MS = 5 * 60 * 1000
 const STORAGE_KEY = 'porady:window_v2' // unikalny klucz dla tej sekcji
 

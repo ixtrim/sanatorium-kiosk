@@ -9,8 +9,8 @@ import TypewriterText from '../components/TypewriterText'
 const FILE_ID = '1TqSspYR7J_rKmIp5N14p7RgyPQYSpIqN5kFsl6PLflI'
 const GID = '528357383'
 
-// Limit: max 3 kliknięcia „Dalej” w oknie 5 minut
-const LIMIT = 3
+// Limit: max 99 kliknięć „Dalej” w oknie 5 minut (nieużywane w nowej logice cyklicznej)
+const LIMIT = 99
 const WINDOW_MS = 5 * 60 * 1000
 const STORAGE_KEY = 'cwiczenia:window_v2' // zmieniony suffix, by wyczyścić stary stan
 
@@ -53,57 +53,29 @@ export default function CiekawostkiCwiczenia() {
   const [viewed, setViewed] = useState<number>(() => readWindow().count)
   const reached = viewed >= LIMIT
 
-  // indeks wyświetlanego wpisu
-  const [idx, setIdx] = useState<number | null>(null)
+  // Indeks wyświetlanego wpisu (cyklicznie 0,1,2)
+  const [idx, setIdx] = useState<number>(0)
 
-  // start: losuj pierwszy wpis (nie zliczamy go)
-  useEffect(() => {
-    if (!loading && rows.length > 0 && idx === null && !reached) {
-      setIdx(Math.floor(Math.random() * rows.length))
-    }
-  }, [loading, rows, idx, reached])
+  // Wyznacz 3 najnowsze wpisy (ostatnie w tablicy)
+  const lastThree = rows.slice(-3)
+  const item = lastThree.length > 0 ? lastThree[idx % lastThree.length] : null
 
-  // watchdog resetu 5-min okna (co 1s)
+  // watchdog resetu 5-min okna (co 1s) - nie zmienia idx, tylko licznik viewed
   useEffect(() => {
     const t = setInterval(() => {
       const s = readWindow()
       if (s.start !== winStart || s.count !== viewed) {
-        // okno mogło wygasnąć -> zresetuj licznik i pozwól ponownie losować
         setWinStart(s.start)
         setViewed(s.count)
-        if (s.count === 0 && idx === null && rows.length > 0) {
-          setIdx(Math.floor(Math.random() * rows.length))
-        }
       }
     }, 1000)
     return () => clearInterval(t)
-  }, [winStart, viewed, idx, rows.length])
+  }, [winStart, viewed])
 
-  const item = idx !== null ? rows[idx] : null
-
-  // klik „Dalej” = nalicz + wylosuj inny wpis; gdy osiągniemy LIMIT -> chowamy treść
+  // klik „Dalej” = przejdź do kolejnego wpisu z 3 ostatnich, cyklicznie
   const reload = () => {
-    const s = readWindow()
-    if (s.count >= LIMIT) return
-    if (rows.length <= 1) return
-
-    // wybierz inny indeks niż obecny
-    let n = idx
-    while (rows.length > 1 && n === idx) {
-      n = Math.floor(Math.random() * rows.length)
-    }
-    setIdx(n as number)
-
-    const nextCount = Math.min(s.count + 1, LIMIT)
-    const updated: WinState = { start: s.start, count: nextCount }
-    writeWindow(updated)
-    setWinStart(updated.start)
-    setViewed(updated.count)
-
-    if (nextCount >= LIMIT) {
-      // po dobrnięciu do limitu chowamy treść i przycisk
-      setIdx(null)
-    }
+    if (lastThree.length === 0) return
+    setIdx((prev) => (prev + 1) % lastThree.length)
   }
 
   return (
@@ -132,7 +104,7 @@ export default function CiekawostkiCwiczenia() {
 
             {/* treść tylko jeśli nie osiągnięto limitu */}
             {!loading && !error && !reached && item && (
-              <article key={`${idx ?? 0}-${viewed}`}>
+              <article key={`${idx}-${viewed}`}>
                 {item.title && <h2 className="view-content-title">{item.title}</h2>}
                 <TypewriterText text={item.content} className="view-content-text" />
               </article>

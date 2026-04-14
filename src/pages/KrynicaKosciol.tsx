@@ -10,7 +10,7 @@ const FILE_ID = '1iIoeZYMJ6K0tGunOtGphW-Ud5K1S_d0VJO2ozB7YW7E'
 const GID = '1156143261'
 
 // (optional) limiter: max 33 "Dalej" in 5 minutes
-const LIMIT = 33
+const LIMIT = 993
 const WINDOW_MS = 5 * 60 * 1000
 const STORAGE_KEY = 'krynica-kosciol:window_v2'
 
