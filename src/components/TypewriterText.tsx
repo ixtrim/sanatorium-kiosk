@@ -13,6 +13,8 @@ export default function TypewriterText({
   speedMs = 18,
   startDelayMs = 0,
 }: Props) {
+  // Make animation twice as fast by halving speedMs
+  const effectiveSpeed = Math.max(4, Math.floor(speedMs / 2))
   const [shown, setShown] = useState('')
   const timerRef = useRef<number | null>(null)
   const delayRef = useRef<number | null>(null)
@@ -31,7 +33,7 @@ export default function TypewriterText({
           window.clearInterval(timerRef.current)
           timerRef.current = null
         }
-      }, Math.max(8, speedMs))
+      }, effectiveSpeed)
     }
 
     if (startDelayMs > 0) {
@@ -46,7 +48,7 @@ export default function TypewriterText({
       delayRef.current = null
       timerRef.current = null
     }
-  }, [text, speedMs, startDelayMs])
+  }, [text, speedMs, startDelayMs, effectiveSpeed])
 
   return (
     <div className={`typewriter ${className}`} aria-live="polite">
